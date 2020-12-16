@@ -6,4 +6,14 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+# IntelliJ
+out/
 .idea
+*.iml
