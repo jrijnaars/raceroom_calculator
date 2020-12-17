@@ -44,7 +44,7 @@ public class JsonRace {
     private String trackLayout;
 
     @JsonProperty("Sessions")
-    List<JsonSessions> sessions;
+    List<JsonSession> sessions;
 
 }
 
