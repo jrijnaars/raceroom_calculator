@@ -1,17 +1,16 @@
 package raceroom.calculator.factories;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import raceroom.calculator.model.Player;
 import raceroom.calculator.repositories.PlayerRepository;
 import raceroom.calculator.repositories.RaceRepository;
-import raceroom.calculator.repositories.SessionRepository;
 import raceroom.calculator.util.JsonPlayer;
 import raceroom.calculator.util.JsonRace;
 import raceroom.calculator.util.JsonSession;
 
-import java.util.List;
-
+@Slf4j
 @Component
 public class PlayerFactory {
 
@@ -21,16 +20,15 @@ public class PlayerFactory {
     @Autowired
     private RaceRepository raceRepository;
 
-    public List<Player> playerBuilder(JsonRace jsonRace) {
+    public void playerBuilder(JsonRace jsonRace) {
         for (JsonSession jsonSession : jsonRace.getSessions()) {
             for (JsonPlayer jsonPlayer : jsonSession.getJsonPlayers()) {
                 Player player = createPlayer(jsonPlayer, jsonRace, jsonSession);
                 playerRepository.save(player);
+
             }
+            log.info("Players in session {} are saved in the database", jsonSession.getType());
         }
-        return playerRepository.getPlayersByRaceIdAndAndSessionTypeOrderByPositionAsc(
-                raceRepository.getRaceByServerAndTrackAndTrackLayout(jsonRace.getServer(), jsonRace.getTrack(), jsonRace.getTrackLayout()).getId(),
-                "Race");
     }
 
     private Player createPlayer(JsonPlayer jsonPlayer, JsonRace jsonRace, JsonSession jsonSession) {

@@ -1,15 +1,16 @@
 package raceroom.calculator.factories;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import raceroom.calculator.model.Race;
 import raceroom.calculator.model.Session;
 import raceroom.calculator.repositories.RaceRepository;
 import raceroom.calculator.repositories.SessionRepository;
 import raceroom.calculator.util.JsonRace;
 import raceroom.calculator.util.JsonSession;
 
-import java.util.List;
-
+@Slf4j
 @Component
 public class SessionFactory {
 
@@ -19,26 +20,23 @@ public class SessionFactory {
     @Autowired
     private RaceRepository raceRepository;
 
-    public List<Session> sessionBuilder(JsonRace jsonRace) {
+    public void sessionBuilder(JsonRace jsonRace) {
         for (JsonSession jsonSession:jsonRace.getSessions()) {
             createSession(jsonSession, jsonRace);
         }
-        return sessionRepository.getSessionsByRaceId(raceRepository.getRaceByServerAndTrackAndTrackLayout(jsonRace.getServer(),
-                jsonRace.getTrack(),
-                jsonRace.getTrackLayout()).getId());
     }
 
     private void createSession(JsonSession jsonSession, JsonRace jsonRace) {
+        Race race = raceRepository.getRaceByServerAndTrackAndTrackLayout(jsonRace.getServer(),
+                jsonRace.getTrack(),
+                jsonRace.getTrackLayout());
         Session session = new Session();
         session.setType(jsonSession.getType());
-        session.setRacename(createRacename(jsonRace));
-        session.setRaceId(raceRepository.getRaceByServerAndTrackAndTrackLayout(jsonRace.getServer(),
-                jsonRace.getTrack(),
-                jsonRace.getTrackLayout()).getId());
+        session.setRacename(race.getRaceName());
+        session.setRaceId(race.getId());
         sessionRepository.save(session);
+        log.info("Session {} is saved in the database", session.getType());
     }
 
-    private String createRacename(JsonRace jsonRace) {
-        return jsonRace.getServer() + "_" + jsonRace.getTrack() + "_" + jsonRace.getTrackLayout();
-    }
+
 }

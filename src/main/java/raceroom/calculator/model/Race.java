@@ -48,4 +48,7 @@ public class Race {
 
     @Column
     private String trackLayout;
+
+    @Column
+    private String raceName;
 }

@@ -28,9 +28,10 @@ public class CalculatorController {
     private PlayerFactory playerFactory;
 
     @PostMapping(value="/calculateRace")
-    public List<Player> post(@RequestBody JsonRace jsonRace) {
+    public String post(@RequestBody JsonRace jsonRace) {
         raceFactory.raceBuilder(jsonRace);
         sessionFactory.sessionBuilder(jsonRace);
-        return playerFactory.playerBuilder(jsonRace);
+        playerFactory.playerBuilder(jsonRace);
+        return "upload succes!";
     }
 }
