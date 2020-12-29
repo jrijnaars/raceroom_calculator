@@ -14,6 +14,6 @@ public class JsonSession {
     private String type;
 
     @JsonProperty("Players")
-    private List<JsonPlayers> jsonPlayers;
+    private List<JsonPlayer> jsonPlayers;
 
 }

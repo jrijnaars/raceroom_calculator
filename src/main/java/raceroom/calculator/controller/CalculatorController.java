@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import raceroom.calculator.factories.PlayerFactory;
 import raceroom.calculator.factories.RaceFactory;
 import raceroom.calculator.factories.SessionFactory;
+import raceroom.calculator.model.Player;
 import raceroom.calculator.model.Session;
 import raceroom.calculator.util.JsonRace;
 
@@ -22,9 +24,13 @@ public class CalculatorController {
     @Autowired
     private SessionFactory sessionFactory;
 
+    @Autowired
+    private PlayerFactory playerFactory;
+
     @PostMapping(value="/calculateRace")
-    public List<Session> post(@RequestBody JsonRace jsonRace) {
+    public List<Player> post(@RequestBody JsonRace jsonRace) {
         raceFactory.raceBuilder(jsonRace);
-        return sessionFactory.sessionBuilder(jsonRace);
+        sessionFactory.sessionBuilder(jsonRace);
+        return playerFactory.playerBuilder(jsonRace);
     }
 }
