@@ -1,4 +1,4 @@
-package raceroom.calculator.util;
+package raceroom.calculator.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JsonPlayer {
+public class PlayerDTO {
 
     @JsonProperty("UserId")
     private int userId;

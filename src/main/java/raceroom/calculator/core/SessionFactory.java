@@ -1,4 +1,4 @@
-package raceroom.calculator.factories;
+package raceroom.calculator.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +7,8 @@ import raceroom.calculator.model.Race;
 import raceroom.calculator.model.Session;
 import raceroom.calculator.repositories.RaceRepository;
 import raceroom.calculator.repositories.SessionRepository;
-import raceroom.calculator.util.JsonRace;
-import raceroom.calculator.util.JsonSession;
+import raceroom.calculator.rest.RaceDTO;
+import raceroom.calculator.rest.SessionDTO;
 
 @Slf4j
 @Component
@@ -20,18 +20,18 @@ public class SessionFactory {
     @Autowired
     private RaceRepository raceRepository;
 
-    public void sessionBuilder(JsonRace jsonRace) {
-        for (JsonSession jsonSession:jsonRace.getSessions()) {
-            createSession(jsonSession, jsonRace);
+    public void sessionBuilder(RaceDTO raceDTO) {
+        for (SessionDTO sessionDTO : raceDTO.getSessions()) {
+            createSession(sessionDTO, raceDTO);
         }
     }
 
-    private void createSession(JsonSession jsonSession, JsonRace jsonRace) {
-        Race race = raceRepository.getRaceByServerAndTrackAndTrackLayout(jsonRace.getServer(),
-                jsonRace.getTrack(),
-                jsonRace.getTrackLayout());
+    private void createSession(SessionDTO sessionDTO, RaceDTO raceDTO) {
+        Race race = raceRepository.getRaceByServerAndTrackAndTrackLayout(raceDTO.getServer(),
+                raceDTO.getTrack(),
+                raceDTO.getTrackLayout());
         Session session = new Session();
-        session.setType(jsonSession.getType());
+        session.setType(sessionDTO.getType());
         session.setRacename(race.getRaceName());
         session.setRaceId(race.getId());
         sessionRepository.save(session);

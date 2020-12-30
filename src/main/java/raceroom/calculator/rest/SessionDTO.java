@@ -1,4 +1,4 @@
-package raceroom.calculator.util;
+package raceroom.calculator.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -8,12 +8,12 @@ import java.util.List;
 
 @Getter
 @Setter
-public class JsonSession {
+public class SessionDTO {
 
     @JsonProperty("Type")
     private String type;
 
     @JsonProperty("Players")
-    private List<JsonPlayer> jsonPlayers;
+    private List<PlayerDTO> playerDTOS;
 
 }
