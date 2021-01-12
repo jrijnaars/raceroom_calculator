@@ -13,4 +13,7 @@ public interface PlayerRepository extends PagingAndSortingRepository<PlayerEntit
 
     @Transactional
     List<PlayerEntity> getPlayersByRaceIdAndAndSessionTypeOrderByPositionAsc(Long raceId, String sessionType);
+
+    @Transactional
+    PlayerEntity getPlayerEntityByRaceIdAndSessionTypeAndFullName(Long raceId, String sessionType, String drivername);
 }
