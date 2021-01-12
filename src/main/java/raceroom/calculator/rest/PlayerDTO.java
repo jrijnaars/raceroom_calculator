@@ -35,6 +35,9 @@ public class PlayerDTO {
     @JsonProperty("PositionInClass")
     private int positionInClass;
 
+    @JsonProperty("BestLapTime")
+    private int bestLapTime;
+
     @JsonProperty("StartPosition")
     private int startPosition;
 

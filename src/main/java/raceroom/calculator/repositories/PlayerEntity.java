@@ -55,6 +55,9 @@ public class PlayerEntity {
     private int startPositionInClass;
 
     @Column
+    private int bestLapTime;
+
+    @Column
     private String finishStatus;
 
     @Column

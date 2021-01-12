@@ -10,6 +10,8 @@ import raceroom.calculator.rest.PlayerDTO;
 import raceroom.calculator.rest.RaceDTO;
 import raceroom.calculator.rest.SessionDTO;
 
+import java.util.List;
+
 @Slf4j
 @Component
 public class PlayerFactory {
@@ -28,7 +30,22 @@ public class PlayerFactory {
                 setRacePoints(sessionDTO, playerEntity);
                 playerRepository.save(playerEntity);
             }
+            setFastestLapPoints(sessionDTO, raceDTO);
             log.info("Players in session {} are saved in the database", sessionDTO.getType());
+        }
+    }
+
+    private void setFastestLapPoints(SessionDTO sessionDTO, RaceDTO raceDTO) {
+        if (sessionDTO.getType().equals("Race")) {
+            Long raceId = raceRepository.getRaceByServerAndTrackAndTrackLayout(
+                    raceDTO.getServer(),
+                    raceDTO.getTrack(),
+                    raceDTO.getTrackLayout()).getId();
+            List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByRaceIdAndSessionTypeOrderByBestLapTimeAsc(
+                    raceId, sessionDTO.getType());
+            PlayerEntity player = bestLapTimeAsc.get(0);
+            player.setPoints(player.getPoints() + 6);
+            playerRepository.save(player);
         }
     }
 
@@ -48,7 +65,7 @@ public class PlayerFactory {
     }
 
     private void excludeDidNotFinish(PlayerEntity playerEntity) {
-        if (playerEntity.getFinishStatus().equals("DidNotFinish")){
+        if (playerEntity.getFinishStatus().equals("DidNotFinish")) {
             playerEntity.setPoints(0);
         }
     }
@@ -137,6 +154,7 @@ public class PlayerFactory {
         playerEntity.setPositionInClass(playerDTO.getPositionInClass());
         playerEntity.setStartPosition(playerDTO.getStartPosition());
         playerEntity.setStartPositionInClass(playerDTO.getStartPositionInClass());
+        playerEntity.setBestLapTime(playerDTO.getBestLapTime());
         playerEntity.setFinishStatus(playerDTO.getFinishStatus());
         return playerEntity;
     }

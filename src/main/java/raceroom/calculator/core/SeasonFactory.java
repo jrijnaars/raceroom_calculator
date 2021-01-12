@@ -59,7 +59,7 @@ public class SeasonFactory {
     }
 
     private List<PlayerEntity> getDriversForRace(RaceDTO raceDTO) {
-        return playerRepository.getPlayersByRaceIdAndAndSessionTypeOrderByPositionAsc(
+        return playerRepository.getPlayersByRaceIdAndSessionTypeOrderByPositionAsc(
                 raceRepository.getRaceByServerAndTrackAndTrackLayout(
                         raceDTO.getServer(),
                         raceDTO.getTrack(),
