@@ -39,4 +39,7 @@ public class SessionFactory {
     }
 
 
+    public void sessionCalculator(RaceDTO raceDTO) {
+
+    }
 }
