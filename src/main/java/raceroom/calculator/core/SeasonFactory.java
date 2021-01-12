@@ -34,7 +34,7 @@ public class SeasonFactory {
             season.setSeasonPoints(getDriverChampionshipPoints(season) + getDriverQualifyPoints(raceDTO, driver) + driver.getPoints());
             seasonRepository.save(season);
         }
-
+        log.info("season results are calculated");
     }
 
     private int getDriverQualifyPoints(RaceDTO raceDTO, PlayerEntity driver) {
