@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import raceroom.calculator.core.PlayerFactory;
-import raceroom.calculator.core.RaceFactory;
-import raceroom.calculator.core.SeasonFactory;
-import raceroom.calculator.core.SessionFactory;
+import raceroom.calculator.core.*;
 
 @RestController
 public class CalculatorController {
@@ -24,11 +21,15 @@ public class CalculatorController {
     @Autowired
     private SeasonFactory seasonFactory;
 
+    @Autowired
+    private QualifyFactory qualifyFactory;
+
     @PostMapping(value="/calculateRace")
     public String post(@RequestBody RaceDTO raceDTO) {
         raceFactory.raceBuilder(raceDTO);
         sessionFactory.sessionBuilder(raceDTO);
         playerFactory.playerBuilder(raceDTO);
+        qualifyFactory.qualifyBuilder(raceDTO);
         seasonFactory.seasonBuilder(raceDTO);
         return "upload succes!";
     }

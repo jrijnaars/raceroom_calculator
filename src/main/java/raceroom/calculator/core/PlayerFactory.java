@@ -26,11 +26,10 @@ public class PlayerFactory {
         for (SessionDTO sessionDTO : raceDTO.getSessions()) {
             for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
                 PlayerEntity playerEntity = createPlayer(playerDTO, raceDTO, sessionDTO);
-                setQualifyPoints(sessionDTO, playerEntity);
                 setRacePoints(sessionDTO, playerEntity);
                 playerRepository.save(playerEntity);
             }
-            setFastestLapPoints(sessionDTO, raceDTO);
+//            setFastestLapPoints(sessionDTO, raceDTO);
             log.info("Players in session {} are saved in the database", sessionDTO.getType());
         }
     }
@@ -49,13 +48,7 @@ public class PlayerFactory {
         }
     }
 
-    private void setQualifyPoints(SessionDTO sessionDTO, PlayerEntity playerEntity) {
-        if (sessionDTO.getType().equals("Qualify")) {
-            if (playerEntity.getPosition() == 1) {
-                playerEntity.setPoints(6);
-            }
-        }
-    }
+
 
     private void setRacePoints(SessionDTO sessionDTO, PlayerEntity playerEntity) {
         if (sessionDTO.getType().equals("Race")) {
