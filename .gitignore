@@ -1,3 +1,4 @@
 /target/*
 /database.mv.db
 /src/main/resources/races/**/*.json
+/src/main/resources/races/oneoff/
