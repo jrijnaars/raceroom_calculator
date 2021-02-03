@@ -24,12 +24,16 @@ public class CalculatorController {
     @Autowired
     private QualifyFactory qualifyFactory;
 
+    @Autowired
+    private RaceFactory raceFactory;
+
     @PostMapping(value="/calculateEvent")
     public String post(@RequestBody EventDTO eventDTO) {
         eventFactory.eventBuilder(eventDTO);
         sessionFactory.sessionBuilder(eventDTO);
         playerFactory.playerBuilder(eventDTO);
         qualifyFactory.qualifyBuilder(eventDTO);
+        raceFactory.raceBuilder(eventDTO);
         seasonFactory.seasonBuilder(eventDTO);
         return "upload succes!";
     }
