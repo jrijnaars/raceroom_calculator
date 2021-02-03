@@ -31,10 +31,18 @@ public class SeasonFactory {
             Season season = getUsedOrNewSeason(driver, eventDTO);
             season.setSeasonName(eventDTO.getServer());
             season.setDriver(driver.getFullName());
-            season.setSeasonPoints(getDriverChampionshipPoints(season) + getDriverQualifyPoints(eventDTO, driver) + driver.getPoints());
+            season.setSeasonPoints(getDriverChampionshipPoints(season) + getDriverQualifyPoints(eventDTO, driver) + driver.getPoints() + getFastestLapPoints(driver));
             seasonRepository.save(season);
         }
         log.info("season results are calculated");
+    }
+
+    private int getFastestLapPoints(PlayerEntity driver) {
+     if (driver.isFastestLap()) {
+         return 6;
+     } else {
+         return 0;
+     }
     }
 
     private int getDriverQualifyPoints(EventDTO eventDTO, PlayerEntity driver) {

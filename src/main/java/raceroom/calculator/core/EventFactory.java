@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.model.EventEntity;
+import raceroom.calculator.repositories.EventEntity;
 import raceroom.calculator.repositories.EventRepository;
 import raceroom.calculator.rest.EventDTO;
 

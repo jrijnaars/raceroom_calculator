@@ -10,8 +10,6 @@ import raceroom.calculator.rest.EventDTO;
 import raceroom.calculator.rest.PlayerDTO;
 import raceroom.calculator.rest.SessionDTO;
 
-import java.util.List;
-
 @Slf4j
 @Component
 public class PlayerFactory {
@@ -28,24 +26,11 @@ public class PlayerFactory {
                 PlayerEntity playerEntity = createPlayer(playerDTO, eventDTO, sessionDTO);
                 playerRepository.save(playerEntity);
             }
-//            setFastestLapPoints(sessionDTO, raceDTO);
             log.info("Players in session {} are saved in the database", sessionDTO.getType());
         }
     }
 
-    private void setFastestLapPoints(SessionDTO sessionDTO, EventDTO eventDTO) {
-        if (sessionDTO.getType().equals("Race")) {
-            Long eventId = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                    eventDTO.getServer(),
-                    eventDTO.getTrack(),
-                    eventDTO.getTrackLayout()).getId();
-            List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
-                    eventId, sessionDTO.getType());
-            PlayerEntity player = bestLapTimeAsc.get(0);
-            player.setPoints(player.getPoints() + 6);
-            playerRepository.save(player);
-        }
-    }
+
 
     private PlayerEntity createPlayer(PlayerDTO playerDTO, EventDTO eventDTO, SessionDTO sessionDTO) {
         PlayerEntity playerEntity = new PlayerEntity();

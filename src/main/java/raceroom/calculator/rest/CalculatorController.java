@@ -27,6 +27,9 @@ public class CalculatorController {
     @Autowired
     private RaceFactory raceFactory;
 
+    @Autowired
+    FastestLapFactory fastestLapFactory;
+
     @PostMapping(value="/calculateEvent")
     public String post(@RequestBody EventDTO eventDTO) {
         eventFactory.eventBuilder(eventDTO);
@@ -34,6 +37,7 @@ public class CalculatorController {
         playerFactory.playerBuilder(eventDTO);
         qualifyFactory.qualifyBuilder(eventDTO);
         raceFactory.raceBuilder(eventDTO);
+        fastestLapFactory.fastestLapBuilder(eventDTO);
         seasonFactory.seasonBuilder(eventDTO);
         return "upload succes!";
     }

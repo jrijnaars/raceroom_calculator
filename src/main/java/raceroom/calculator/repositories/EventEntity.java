@@ -1,4 +1,4 @@
-package raceroom.calculator.model;
+package raceroom.calculator.repositories;
 
 import lombok.Getter;
 import lombok.Setter;
