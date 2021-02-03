@@ -10,7 +10,7 @@ import raceroom.calculator.core.*;
 public class CalculatorController {
 
     @Autowired
-    private RaceFactory raceFactory;
+    private EventFactory eventFactory;
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -24,13 +24,13 @@ public class CalculatorController {
     @Autowired
     private QualifyFactory qualifyFactory;
 
-    @PostMapping(value="/calculateRace")
-    public String post(@RequestBody RaceDTO raceDTO) {
-        raceFactory.raceBuilder(raceDTO);
-        sessionFactory.sessionBuilder(raceDTO);
-        playerFactory.playerBuilder(raceDTO);
-        qualifyFactory.qualifyBuilder(raceDTO);
-        seasonFactory.seasonBuilder(raceDTO);
+    @PostMapping(value="/calculateEvent")
+    public String post(@RequestBody EventDTO eventDTO) {
+        eventFactory.eventBuilder(eventDTO);
+        sessionFactory.sessionBuilder(eventDTO);
+        playerFactory.playerBuilder(eventDTO);
+        qualifyFactory.qualifyBuilder(eventDTO);
+        seasonFactory.seasonBuilder(eventDTO);
         return "upload succes!";
     }
 }

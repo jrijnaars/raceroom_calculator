@@ -4,11 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import raceroom.calculator.model.Season;
+import raceroom.calculator.repositories.EventRepository;
 import raceroom.calculator.repositories.PlayerEntity;
 import raceroom.calculator.repositories.PlayerRepository;
-import raceroom.calculator.repositories.RaceRepository;
 import raceroom.calculator.repositories.SeasonRepository;
-import raceroom.calculator.rest.RaceDTO;
+import raceroom.calculator.rest.EventDTO;
 
 import java.util.List;
 
@@ -20,33 +20,33 @@ public class SeasonFactory {
     private PlayerRepository playerRepository;
 
     @Autowired
-    private RaceRepository raceRepository;
+    private EventRepository eventRepository;
 
     @Autowired
     private SeasonRepository seasonRepository;
 
-    public void seasonBuilder(RaceDTO raceDTO) {
-        List<PlayerEntity> driversForRace = getDriversForRace(raceDTO);
+    public void seasonBuilder(EventDTO eventDTO) {
+        List<PlayerEntity> driversForRace = getDriversForRace(eventDTO);
         for (PlayerEntity driver:driversForRace) {
-            Season season = getUsedOrNewSeason(driver, raceDTO);
-            season.setSeasonName(raceDTO.getServer());
+            Season season = getUsedOrNewSeason(driver, eventDTO);
+            season.setSeasonName(eventDTO.getServer());
             season.setDriver(driver.getFullName());
-            season.setSeasonPoints(getDriverChampionshipPoints(season) + getDriverQualifyPoints(raceDTO, driver) + driver.getPoints());
+            season.setSeasonPoints(getDriverChampionshipPoints(season) + getDriverQualifyPoints(eventDTO, driver) + driver.getPoints());
             seasonRepository.save(season);
         }
         log.info("season results are calculated");
     }
 
-    private int getDriverQualifyPoints(RaceDTO raceDTO, PlayerEntity driver) {
-        return playerRepository.getPlayerEntityByRaceIdAndSessionTypeAndFullName(
-                raceRepository.getRaceByServerAndTrackAndTrackLayout(
-                        raceDTO.getServer(),
-                        raceDTO.getTrack(),
-                        raceDTO.getTrackLayout()).getId(), "Qualify", driver.getFullName()).getPoints();
+    private int getDriverQualifyPoints(EventDTO eventDTO, PlayerEntity driver) {
+        return playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
+                eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                        eventDTO.getServer(),
+                        eventDTO.getTrack(),
+                        eventDTO.getTrackLayout()).getId(), "Qualify", driver.getFullName()).getPoints();
     }
 
-    private Season getUsedOrNewSeason(PlayerEntity driver, RaceDTO raceDTO) {
-        Season season = seasonRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), raceDTO.getServer());
+    private Season getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {
+        Season season = seasonRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), eventDTO.getServer());
         if (season == null) {
             season = new Season();
         }
@@ -58,12 +58,12 @@ public class SeasonFactory {
                 0 : season.getSeasonPoints();
     }
 
-    private List<PlayerEntity> getDriversForRace(RaceDTO raceDTO) {
-        return playerRepository.getPlayersByRaceIdAndSessionTypeOrderByPositionAsc(
-                raceRepository.getRaceByServerAndTrackAndTrackLayout(
-                        raceDTO.getServer(),
-                        raceDTO.getTrack(),
-                        raceDTO.getTrackLayout()).getId(),
+    private List<PlayerEntity> getDriversForRace(EventDTO eventDTO) {
+        return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
+                eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                        eventDTO.getServer(),
+                        eventDTO.getTrack(),
+                        eventDTO.getTrackLayout()).getId(),
                 "Race"
         );
     }

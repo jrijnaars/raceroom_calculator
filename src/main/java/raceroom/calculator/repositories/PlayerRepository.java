@@ -12,11 +12,11 @@ import java.util.List;
 public interface PlayerRepository extends PagingAndSortingRepository<PlayerEntity, Long> {
 
     @Transactional
-    List<PlayerEntity> getPlayersByRaceIdAndSessionTypeOrderByPositionAsc(Long raceId, String sessionType);
+    List<PlayerEntity> getPlayersByEventIdAndSessionTypeOrderByPositionAsc(Long eventId, String sessionType);
 
     @Transactional
-    List<PlayerEntity> getPlayersByRaceIdAndSessionTypeOrderByBestLapTimeAsc(Long raceId, String sessionType);
+    List<PlayerEntity> getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(Long eventId, String sessionType);
 
     @Transactional
-    PlayerEntity getPlayerEntityByRaceIdAndSessionTypeAndFullName(Long raceId, String sessionType, String drivername);
+    PlayerEntity getPlayerEntityByEventIdAndSessionTypeAndFullName(Long eventId, String sessionType, String drivername);
 }

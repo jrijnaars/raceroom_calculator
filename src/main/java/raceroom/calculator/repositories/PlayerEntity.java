@@ -16,7 +16,7 @@ public class PlayerEntity {
     private Long id;
 
     @Column
-    private long raceId;
+    private long eventId;
 
     @Column
     private String sessionType;

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RaceDTO {
+public class EventDTO {
 
     @JsonProperty("Server")
     private String server;

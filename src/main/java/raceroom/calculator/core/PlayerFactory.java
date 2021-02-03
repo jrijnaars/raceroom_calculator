@@ -3,11 +3,11 @@ package raceroom.calculator.core;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import raceroom.calculator.repositories.EventRepository;
 import raceroom.calculator.repositories.PlayerEntity;
 import raceroom.calculator.repositories.PlayerRepository;
-import raceroom.calculator.repositories.RaceRepository;
+import raceroom.calculator.rest.EventDTO;
 import raceroom.calculator.rest.PlayerDTO;
-import raceroom.calculator.rest.RaceDTO;
 import raceroom.calculator.rest.SessionDTO;
 
 import java.util.List;
@@ -20,12 +20,12 @@ public class PlayerFactory {
     private PlayerRepository playerRepository;
 
     @Autowired
-    private RaceRepository raceRepository;
+    private EventRepository eventRepository;
 
-    public void playerBuilder(RaceDTO raceDTO) {
-        for (SessionDTO sessionDTO : raceDTO.getSessions()) {
+    public void playerBuilder(EventDTO eventDTO) {
+        for (SessionDTO sessionDTO : eventDTO.getSessions()) {
             for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
-                PlayerEntity playerEntity = createPlayer(playerDTO, raceDTO, sessionDTO);
+                PlayerEntity playerEntity = createPlayer(playerDTO, eventDTO, sessionDTO);
                 setRacePoints(sessionDTO, playerEntity);
                 playerRepository.save(playerEntity);
             }
@@ -34,14 +34,14 @@ public class PlayerFactory {
         }
     }
 
-    private void setFastestLapPoints(SessionDTO sessionDTO, RaceDTO raceDTO) {
+    private void setFastestLapPoints(SessionDTO sessionDTO, EventDTO eventDTO) {
         if (sessionDTO.getType().equals("Race")) {
-            Long raceId = raceRepository.getRaceByServerAndTrackAndTrackLayout(
-                    raceDTO.getServer(),
-                    raceDTO.getTrack(),
-                    raceDTO.getTrackLayout()).getId();
-            List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByRaceIdAndSessionTypeOrderByBestLapTimeAsc(
-                    raceId, sessionDTO.getType());
+            Long eventId = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                    eventDTO.getServer(),
+                    eventDTO.getTrack(),
+                    eventDTO.getTrackLayout()).getId();
+            List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
+                    eventId, sessionDTO.getType());
             PlayerEntity player = bestLapTimeAsc.get(0);
             player.setPoints(player.getPoints() + 6);
             playerRepository.save(player);
@@ -129,12 +129,12 @@ public class PlayerFactory {
 
     }
 
-    private PlayerEntity createPlayer(PlayerDTO playerDTO, RaceDTO raceDTO, SessionDTO sessionDTO) {
+    private PlayerEntity createPlayer(PlayerDTO playerDTO, EventDTO eventDTO, SessionDTO sessionDTO) {
         PlayerEntity playerEntity = new PlayerEntity();
-        playerEntity.setRaceId(raceRepository.getRaceByServerAndTrackAndTrackLayout(
-                raceDTO.getServer(),
-                raceDTO.getTrack(),
-                raceDTO.getTrackLayout()).getId());
+        playerEntity.setEventId(eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                eventDTO.getServer(),
+                eventDTO.getTrack(),
+                eventDTO.getTrackLayout()).getId());
         playerEntity.setSessionType(sessionDTO.getType());
         playerEntity.setUserId(playerDTO.getUserId());
         playerEntity.setFullName(playerDTO.getFullName());

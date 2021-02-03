@@ -19,9 +19,9 @@ public class Session {
     private String type;
 
     @Column
-    private Long raceId;
+    private Long eventId;
 
     @Column
-    private String racename;
+    private String eventname;
 
 }

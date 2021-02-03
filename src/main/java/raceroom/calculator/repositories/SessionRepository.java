@@ -4,7 +4,6 @@ package raceroom.calculator.repositories;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
-import raceroom.calculator.model.Race;
 import raceroom.calculator.model.Session;
 
 import java.util.List;
@@ -17,5 +16,5 @@ public interface SessionRepository extends PagingAndSortingRepository<Session, L
     List<Session> getSessionsByType(String type);
 
     @Transactional
-    List<Session> getSessionsByRaceId(Long raceId);
+    List<Session> getSessionsByEventId(Long eventId);
 }
