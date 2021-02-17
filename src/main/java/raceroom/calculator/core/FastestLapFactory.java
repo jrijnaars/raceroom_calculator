@@ -21,9 +21,26 @@ public class FastestLapFactory {
     @Autowired
     private EventRepository eventRepository;
 
-    public void fastestLapBuilder(EventDTO eventDTO) {
+    public void fastestLapBuilderRace1(EventDTO eventDTO) {
         for (SessionDTO sessionDTO : eventDTO.getSessions()) {
             if (sessionDTO.getType().equals("Race")) {
+                Long eventId = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                        eventDTO.getServer(),
+                        eventDTO.getTrack(),
+                        eventDTO.getTrackLayout()).getId();
+                List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
+                        eventId, sessionDTO.getType());
+                PlayerEntity player = bestLapTimeAsc.get(0);
+                player.setFastestLap(true);
+                playerRepository.save(player);
+            }
+        }
+        log.info("Fastest lap resuls have been set");
+    }
+
+    public void fastestLapBuilderRace2(EventDTO eventDTO) {
+        for (SessionDTO sessionDTO : eventDTO.getSessions()) {
+            if (sessionDTO.getType().equals("Race2")) {
                 Long eventId = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
                         eventDTO.getServer(),
                         eventDTO.getTrack(),

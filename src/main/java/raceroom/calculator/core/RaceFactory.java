@@ -20,7 +20,7 @@ public class RaceFactory {
     @Autowired
     private EventRepository eventRepository;
 
-    public void raceBuilder(EventDTO eventDTO) {
+    public void race1Builder(EventDTO eventDTO) {
         for (SessionDTO sessionDTO : eventDTO.getSessions()) {
             for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
                 PlayerEntity playerEntity = playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
@@ -28,6 +28,21 @@ public class RaceFactory {
                                 eventDTO.getServer(),
                                 eventDTO.getTrack(),
                                 eventDTO.getTrackLayout()).getId(), "Race", playerDTO.getFullName());
+                setRacePoints(sessionDTO, playerEntity);
+                playerRepository.save(playerEntity);
+            }
+        }
+        log.info("Raceresults have been set");
+    }
+
+    public void race2Builder(EventDTO eventDTO) {
+        for (SessionDTO sessionDTO : eventDTO.getSessions()) {
+            for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
+                PlayerEntity playerEntity = playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
+                        eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                                eventDTO.getServer(),
+                                eventDTO.getTrack(),
+                                eventDTO.getTrackLayout()).getId(), "Race2", playerDTO.getFullName());
                 setRacePoints(sessionDTO, playerEntity);
                 playerRepository.save(playerEntity);
             }
