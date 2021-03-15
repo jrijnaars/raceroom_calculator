@@ -54,6 +54,13 @@ public class RaceFactory {
         if (sessionDTO.getType().equals("Race")) {
             setPointsByRacePosition(playerEntity);
             excludeDidNotFinish(playerEntity);
+//            excludeDisqualified(playerEntity);
+        }
+    }
+
+    private void excludeDisqualified(PlayerEntity playerEntity) {
+        if (playerEntity.getIncidentPoints() >= 50) {
+            playerEntity.setPoints(0);
         }
     }
 

@@ -65,4 +65,7 @@ public class PlayerEntity {
 
     @Column
     private boolean fastestLap;
+
+    @Column
+    private int incidentPoints;
 }

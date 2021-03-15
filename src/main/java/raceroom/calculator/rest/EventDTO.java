@@ -44,7 +44,7 @@ public class EventDTO {
     private String trackLayout;
 
     @JsonProperty("Sessions")
-    List<SessionDTO> sessions;
+    private List<SessionDTO> sessions;
 
 }
 

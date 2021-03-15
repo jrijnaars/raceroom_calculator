@@ -6,9 +6,7 @@ import org.springframework.stereotype.Component;
 import raceroom.calculator.repositories.EventRepository;
 import raceroom.calculator.repositories.PlayerEntity;
 import raceroom.calculator.repositories.PlayerRepository;
-import raceroom.calculator.rest.EventDTO;
-import raceroom.calculator.rest.PlayerDTO;
-import raceroom.calculator.rest.SessionDTO;
+import raceroom.calculator.rest.*;
 
 @Slf4j
 @Component
@@ -31,7 +29,6 @@ public class PlayerFactory {
     }
 
 
-
     private PlayerEntity createPlayer(PlayerDTO playerDTO, EventDTO eventDTO, SessionDTO sessionDTO) {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setEventId(eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
@@ -52,6 +49,20 @@ public class PlayerFactory {
         playerEntity.setStartPositionInClass(playerDTO.getStartPositionInClass());
         playerEntity.setBestLapTime(playerDTO.getBestLapTime());
         playerEntity.setFinishStatus(playerDTO.getFinishStatus());
+        if (sessionDTO.getType().equals("Race") || sessionDTO.getType().equals("Race2")) {
+            playerEntity.setIncidentPoints(calculateIncidentPoints(playerDTO, sessionDTO));
+        }
         return playerEntity;
+    }
+
+    private int calculateIncidentPoints(PlayerDTO playerDTO, SessionDTO sessionDTO) {
+        int totalIncidentsPoint = 0;
+
+        for (LapDTO lapDTO : playerDTO.getRaceSessionLaps()) {
+            for (IncidentDTO incidentDTO : lapDTO.getIncident()) {
+                totalIncidentsPoint = totalIncidentsPoint + incidentDTO.getPoints();
+            }
+        }
+        return totalIncidentsPoint;
     }
 }
