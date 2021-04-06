@@ -10,6 +10,9 @@ import raceroom.calculator.rest.EventDTO;
 import raceroom.calculator.rest.PlayerDTO;
 import raceroom.calculator.rest.SessionDTO;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @Slf4j
 public class RaceFactory {
@@ -20,42 +23,29 @@ public class RaceFactory {
     @Autowired
     private EventRepository eventRepository;
 
-    public void race1Builder(EventDTO eventDTO) {
-        for (SessionDTO sessionDTO : eventDTO.getSessions()) {
-            for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
-                PlayerEntity playerEntity = playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
-                        eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                                eventDTO.getServer(),
-                                eventDTO.getTrack(),
-                                eventDTO.getTrackLayout()).getId(), "Race", playerDTO.getFullName());
-                setRacePoints(sessionDTO, playerEntity);
-                playerRepository.save(playerEntity);
-            }
+    public void raceBuilder(EventDTO eventDTO) {
+        List<SessionDTO> racesInEvent = getRacesInEvent(eventDTO);
+        for (SessionDTO sessionDTO : racesInEvent) {
+            setRacepointsForSession(eventDTO, sessionDTO);
         }
         log.info("Raceresults have been set");
     }
 
-    public void race2Builder(EventDTO eventDTO) {
-        for (SessionDTO sessionDTO : eventDTO.getSessions()) {
-            for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
-                PlayerEntity playerEntity = playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
-                        eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                                eventDTO.getServer(),
-                                eventDTO.getTrack(),
-                                eventDTO.getTrackLayout()).getId(), "Race2", playerDTO.getFullName());
-                setRacePoints(sessionDTO, playerEntity);
-                playerRepository.save(playerEntity);
-            }
+    private void setRacepointsForSession(EventDTO eventDTO, SessionDTO sessionDTO) {
+        for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
+            PlayerEntity playerEntity = playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
+                    eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                            eventDTO.getServer(),
+                            eventDTO.getTrack(),
+                            eventDTO.getTrackLayout()).getId(), sessionDTO.getType(), playerDTO.getFullName());
+            setRacePoints(playerEntity);
+            playerRepository.save(playerEntity);
         }
-        log.info("Raceresults have been set");
     }
 
-    private void setRacePoints(SessionDTO sessionDTO, PlayerEntity playerEntity) {
-        if (sessionDTO.getType().equals("Race")) {
-            setPointsByRacePosition(playerEntity);
-            excludeDidNotFinish(playerEntity);
-//            excludeDisqualified(playerEntity);
-        }
+    private void setRacePoints(PlayerEntity playerEntity) {
+        setPointsByRacePosition(playerEntity);
+        excludeDidNotFinish(playerEntity);
     }
 
     private void excludeDisqualified(PlayerEntity playerEntity) {
@@ -134,5 +124,9 @@ public class RaceFactory {
                 break;
         }
 
+    }
+
+    public List<SessionDTO> getRacesInEvent(EventDTO eventDTO) {
+        return eventDTO.getSessions().stream().filter(session -> session.getType().contains("Race")).collect(Collectors.toList());
     }
 }

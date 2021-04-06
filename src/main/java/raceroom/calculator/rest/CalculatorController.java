@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import raceroom.calculator.core.*;
 
-import javax.naming.directory.NoSuchAttributeException;
-
 @Slf4j
 @RestController
 public class CalculatorController {
@@ -35,17 +33,12 @@ public class CalculatorController {
     FastestLapFactory fastestLapFactory;
 
     @PostMapping(value="/calculateEvent")
-    public String post(@RequestBody EventDTO eventDTO) throws NoSuchAttributeException {
+    public String post(@RequestBody EventDTO eventDTO) {
         eventFactory.eventBuilder(eventDTO);
         sessionFactory.sessionBuilder(eventDTO);
         playerFactory.playerBuilder(eventDTO);
         qualifyFactory.qualifyBuilder(eventDTO);
-        raceFactory.race1Builder(eventDTO);
-        try {
-            raceFactory.race2Builder(eventDTO);
-        } catch (Exception e) {
-            log.info("No race 2 in this event");
-        }
+        raceFactory.raceBuilder(eventDTO);
         fastestLapFactory.fastestLapBuilderRace1(eventDTO);
         fastestLapFactory.fastestLapBuilderRace2(eventDTO);
         seasonFactory.seasonBuilder(eventDTO);
