@@ -39,8 +39,6 @@ public class CalculatorController {
         playerFactory.playerBuilder(eventDTO);
         qualifyFactory.qualifyBuilder(eventDTO);
         raceFactory.raceBuilder(eventDTO);
-        fastestLapFactory.fastestLapBuilderRace1(eventDTO);
-        fastestLapFactory.fastestLapBuilderRace2(eventDTO);
         seasonFactory.seasonBuilder(eventDTO);
         return "upload succes!";
     }

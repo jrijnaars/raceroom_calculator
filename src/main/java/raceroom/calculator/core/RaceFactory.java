@@ -46,10 +46,11 @@ public class RaceFactory {
     private void setRacePoints(PlayerEntity playerEntity) {
         setPointsByRacePosition(playerEntity);
         excludeDidNotFinish(playerEntity);
+        excludeDisqualified(playerEntity);
     }
 
     private void excludeDisqualified(PlayerEntity playerEntity) {
-        if (playerEntity.getIncidentPoints() >= 50) {
+        if (playerEntity.getFinishStatus().equals("Disqualified")) {
             playerEntity.setPoints(0);
         }
     }
