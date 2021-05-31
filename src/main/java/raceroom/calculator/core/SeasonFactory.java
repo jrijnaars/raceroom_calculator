@@ -10,7 +10,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class SeasonFactory {
+public class SeasonFactory extends CalculatorFactory {
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -73,14 +73,6 @@ public class SeasonFactory {
      } else {
          return 0;
      }
-    }
-
-    private int getDriverQualifyPoints(EventDTO eventDTO, PlayerEntity driver) {
-        return playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
-                eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        eventDTO.getServer(),
-                        eventDTO.getTrack(),
-                        eventDTO.getTrackLayout()).getId(), "Qualify", driver.getFullName()).getPoints();
     }
 
     private SeasonEntity getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {

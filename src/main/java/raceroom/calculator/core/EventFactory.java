@@ -4,22 +4,42 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.repositories.EventEntity;
-import raceroom.calculator.repositories.EventRepository;
+import raceroom.calculator.repositories.*;
 import raceroom.calculator.rest.EventDTO;
+import raceroom.calculator.rest.SessionDTO;
+
+import java.util.List;
 
 @Slf4j
 @Component
-public class EventFactory {
+public class EventFactory extends CalculatorFactory{
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EventResultsRepository eventResultsRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
 
     public void eventBuilder(EventDTO eventDTO) {
         eventdataDuplicateCheck(eventDTO);
         EventEntity eventEntity = createEvent(eventDTO);
         eventRepository.save(eventEntity);
         log.info("Event {} is uploaded in the database", eventEntity.getEventName());
+    }
+
+    public void calculateEventResults(EventDTO eventDTO) {
+        EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
+                eventDTO.getServer(),
+                eventDTO.getTrack(),
+                eventDTO.getTrackLayout());
+        List<SessionDTO> racesInEvent = getRacesInEvent(eventDTO);
+        for (SessionDTO race: racesInEvent) {
+            List<PlayerEntity> players = playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(eventEntity.getId(), race.getType());
+            createEventResultForPlayers(eventEntity, players, eventDTO);
+        }
     }
 
     @SneakyThrows
@@ -52,5 +72,36 @@ public class EventFactory {
 
     private String createEventname(EventDTO eventDTO) {
         return eventDTO.getServer() + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout();
+    }
+
+    private void createEventResultForPlayers(EventEntity eventEntity, List<PlayerEntity> players, EventDTO eventDTO) {
+        for (PlayerEntity player: players) {
+            EventResultEntity eventResults = getNewOrUsedEvent(eventEntity, player);
+            eventResults.setEventName(eventEntity.getEventName());
+            eventResults.setDriverName(player.getFullName());
+            eventResults.setCarName(player.getCar());
+            eventResults.setTrackName(eventEntity.getTrack());
+            eventResults.setEventPoints(setEventPoints(eventResults, player, eventDTO));
+            eventResultsRepository.save(eventResults);
+        }
+    }
+
+    private int setEventPoints(EventResultEntity eventResults, PlayerEntity player, EventDTO eventDTO) {
+        int totalPoints = eventResults.getEventPoints() + player.getPoints();
+        if (player.getSessionType().equals("Race")) {
+            totalPoints = totalPoints + getDriverQualifyPoints(eventDTO, player);
+        }
+        return totalPoints;
+    }
+
+    private EventResultEntity getNewOrUsedEvent(EventEntity eventEntity, PlayerEntity player) {
+        EventResultEntity eventResults = eventResultsRepository.getEventResultEntityByEventNameAndDriverName(
+                eventEntity.getEventName(),
+                player.getFullName());
+        if (eventResults == null) {
+            return new EventResultEntity();
+        } else {
+            return eventResults;
+        }
     }
 }

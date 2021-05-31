@@ -39,6 +39,7 @@ public class CalculatorController {
         playerFactory.playerBuilder(eventDTO);
         qualifyFactory.qualifyBuilder(eventDTO);
         raceFactory.raceBuilder(eventDTO);
+        eventFactory.calculateEventResults(eventDTO);
         seasonFactory.seasonBuilder(eventDTO);
         return "upload succes!";
     }

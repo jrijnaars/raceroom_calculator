@@ -11,11 +11,10 @@ import raceroom.calculator.rest.PlayerDTO;
 import raceroom.calculator.rest.SessionDTO;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class RaceFactory {
+public class RaceFactory extends CalculatorFactory {
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -125,9 +124,5 @@ public class RaceFactory {
                 break;
         }
 
-    }
-
-    public List<SessionDTO> getRacesInEvent(EventDTO eventDTO) {
-        return eventDTO.getSessions().stream().filter(session -> session.getType().contains("Race")).collect(Collectors.toList());
     }
 }
