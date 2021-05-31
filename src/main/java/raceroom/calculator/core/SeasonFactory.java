@@ -3,11 +3,7 @@ package raceroom.calculator.core;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.model.Season;
-import raceroom.calculator.repositories.EventRepository;
-import raceroom.calculator.repositories.PlayerEntity;
-import raceroom.calculator.repositories.PlayerRepository;
-import raceroom.calculator.repositories.SeasonRepository;
+import raceroom.calculator.repositories.*;
 import raceroom.calculator.rest.EventDTO;
 
 import java.util.List;
@@ -34,7 +30,7 @@ public class SeasonFactory {
 
     private void updateQuallifyPoints(EventDTO eventDTO, List<PlayerEntity> driversForRace1) {
         for (PlayerEntity driver:driversForRace1) {
-            Season season = getUsedOrNewSeason(driver, eventDTO);
+            SeasonEntity season = getUsedOrNewSeason(driver, eventDTO);
             season.setSeasonName(eventDTO.getServer());
             season.setDriver(driver.getFullName());
             int totalpoints = getDriverChampionshipPoints(season);
@@ -46,7 +42,7 @@ public class SeasonFactory {
 
     private void updateRacePoints(EventDTO eventDTO, List<PlayerEntity> driversForRace1) {
         for (PlayerEntity driver:driversForRace1) {
-            Season season = getUsedOrNewSeason(driver, eventDTO);
+            SeasonEntity season = getUsedOrNewSeason(driver, eventDTO);
             season.setSeasonName(eventDTO.getServer());
             season.setDriver(driver.getFullName());
             season.setSeasonPoints(getTotalpoints(driver, season));
@@ -55,17 +51,19 @@ public class SeasonFactory {
         }
     }
 
-    private int getTotalpoints(PlayerEntity driver, Season season) {
+    private int getTotalpoints(PlayerEntity driver, SeasonEntity season) {
         int totalpoints = getDriverChampionshipPoints(season);
 
         if (!checkCarUsedBefore(driver, season)){
+            log.info("driver: " + driver.getFullName() + " changed from car: " + season.getCarname() + " to " + driver.getCar());
+            log.info("so total points of: " + totalpoints + " are lost!");
             totalpoints = 0;
         }
         totalpoints = totalpoints + driver.getPoints();
         return totalpoints;
     }
 
-    private boolean checkCarUsedBefore(PlayerEntity driver, Season season) {
+    private boolean checkCarUsedBefore(PlayerEntity driver, SeasonEntity season) {
         return driver.getCar().equals(season.getCarname()) || season.getCarname() == null;
     }
 
@@ -85,15 +83,15 @@ public class SeasonFactory {
                         eventDTO.getTrackLayout()).getId(), "Qualify", driver.getFullName()).getPoints();
     }
 
-    private Season getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {
-        Season season = seasonRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), eventDTO.getServer());
+    private SeasonEntity getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {
+        SeasonEntity season = seasonRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), eventDTO.getServer());
         if (season == null) {
-            season = new Season();
+            season = new SeasonEntity();
         }
         return season;
     }
 
-    private int getDriverChampionshipPoints(Season season) {
+    private int getDriverChampionshipPoints(SeasonEntity season) {
         return season == null ?
                 0 : season.getSeasonPoints();
     }

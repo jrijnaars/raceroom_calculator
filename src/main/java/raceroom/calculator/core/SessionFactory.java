@@ -3,9 +3,9 @@ package raceroom.calculator.core;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.model.Session;
 import raceroom.calculator.repositories.EventEntity;
 import raceroom.calculator.repositories.EventRepository;
+import raceroom.calculator.repositories.SessionEntity;
 import raceroom.calculator.repositories.SessionRepository;
 import raceroom.calculator.rest.EventDTO;
 import raceroom.calculator.rest.SessionDTO;
@@ -30,7 +30,7 @@ public class SessionFactory {
         EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(eventDTO.getServer(),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout());
-        Session session = new Session();
+        SessionEntity session = new SessionEntity();
         session.setType(sessionDTO.getType());
         session.setEventname(eventEntity.getEventName());
         session.setEventId(eventEntity.getId());
