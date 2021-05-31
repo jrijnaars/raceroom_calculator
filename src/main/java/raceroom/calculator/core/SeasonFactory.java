@@ -49,12 +49,24 @@ public class SeasonFactory {
             Season season = getUsedOrNewSeason(driver, eventDTO);
             season.setSeasonName(eventDTO.getServer());
             season.setDriver(driver.getFullName());
-            int totalpoints = getDriverChampionshipPoints(season);
-            totalpoints = totalpoints + driver.getPoints();
-            totalpoints = totalpoints + getFastestLapPoints(driver);
-            season.setSeasonPoints(totalpoints);
+            season.setSeasonPoints(getTotalpoints(driver, season));
+            season.setCarname(driver.getCar());
             seasonRepository.save(season);
         }
+    }
+
+    private int getTotalpoints(PlayerEntity driver, Season season) {
+        int totalpoints = getDriverChampionshipPoints(season);
+
+        if (!checkCarUsedBefore(driver, season)){
+            totalpoints = 0;
+        }
+        totalpoints = totalpoints + driver.getPoints();
+        return totalpoints;
+    }
+
+    private boolean checkCarUsedBefore(PlayerEntity driver, Season season) {
+        return driver.getCar().equals(season.getCarname()) || season.getCarname() == null;
     }
 
     private int getFastestLapPoints(PlayerEntity driver) {

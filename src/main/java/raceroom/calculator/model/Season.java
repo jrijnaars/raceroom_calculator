@@ -23,4 +23,7 @@ public class Season {
 
     @Column
     private int seasonPoints;
+
+    @Column
+    private String carname;
 }
