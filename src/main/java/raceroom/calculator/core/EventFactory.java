@@ -104,4 +104,7 @@ public class EventFactory extends CalculatorFactory{
             return eventResults;
         }
     }
+
+    public void getEvent() {
+    }
 }
