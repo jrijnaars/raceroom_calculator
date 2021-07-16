@@ -14,7 +14,7 @@ public class PlayersController {
     private PlayerRepository playerRepository;
 
     @GetMapping("/players")
-    public String home(Model model){
+    public String players(Model model){
         model.addAttribute("players", playerRepository.findAll());
         return "players";
     }

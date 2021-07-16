@@ -9,11 +9,15 @@
 
         <table th:unless="${#lists.isEmpty(players)}" class="table table-bordered table-striped mb-0">
             <tr>
-                <th th:text="#{username}"></th>
+                <th th:text="#{sessionType}"></th>
+                <th th:text="#{position}"></th>
+                <th th:text="#{fullName}"></th>
                 <th th:text="#{points}"></th>
             </thead>
             <tr th:each="player : ${players}">
-                <td th:text="${player.username}"></td>
+                <td th:text="${player.sessionType}"></td>
+                <td th:text="${player.position}"></td>
+                <td th:text="${player.fullName}"></td>
                 <td th:text="${player.points}"></td>
             </tr>
         </table>

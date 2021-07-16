@@ -8,8 +8,6 @@
     <section>
         <div>
             <span th:text="#{greetings} "></span>
-            <br>
-            <a th:text="|My profile|" th:href="@{/students/{number}(number=${username})}"></a>
         </div>
     </section>
     <footer th:replace="main :: footer_margin"></footer>

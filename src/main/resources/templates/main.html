@@ -3,25 +3,15 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" th:href="@{/calculator/css/theme.css}">
 
-    <title th:text="|${title} - #{annual_program}|"></title>
+    <title th:text="|${title} - #{rijnaars_motorsport}|"></title>
     <img th:src="@{/calculator/images/esi-logo.png}" alt="Logo esi" th:id="logo_esi">
-    <h1 th:text="#{annual_program}"></h1>
+    <h1 th:text="#{rijnaars_motorsport}"></h1>
     <h2 class="title" th:text="${title}"></h2>
     <nav class="nav justify-content-center">
         <a class="nav-link active" th:href="@{/}" th:text="#{home}"></a>
+        <a class="nav-link active" th:href="@{/events}" th:text="#{events}"></a>
         <a class="nav-link active" th:href="@{/players}" th:text="#{players}"></a>
-        <a class="nav-link active" th:href="@{/students}" th:text="#{students}" sec:authorize="hasRole('TEACHER')"></a>
-        <a class="nav-link active" th:href="@{/students/{number}(number=${username})}" th:text="#{my_profile}" sec:authorize="hasRole('STUDENT')"></a>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" th:href="@{/}" role="button" aria-haspopup="true"
-                aria-expanded="false" >
-                <img th:src="@{/calculator/images/icons8-language-50.png}" alt="#{language}">
-            </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" th:href="@{__${#httpServletRequest.requestURI}__(lang=en)}" th:text="#{english}"></a>
-                <a class="dropdown-item" th:href="@{__${#httpServletRequest.requestURI}__(lang=fr)}" th:text="#{french}"></a>
-            </div>
-        </li>
+        <a class="nav-link active" th:href="@{/h2}" th:text="#{dbConsole}"></a>
     </nav>
 </header>
 
