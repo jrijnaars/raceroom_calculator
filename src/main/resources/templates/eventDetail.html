@@ -6,21 +6,37 @@
 <body>
     <header th:replace="main :: header(title=#{events})"></header>
     <section>
-        <table th:unless="${#lists.isEmpty(events)}" class="table table-bordered table-striped mb-0">
+        <h3 th:text="#{results}"></h3>
+        <!-- TODO print track name above -->
+        <table th:unless="${#lists.isEmpty(results)}" class="table table-bordered table-striped mb-0">
             <tr>
-                <th th:text="#{id}"></th>
-                <th th:text="#{eventName}"></th>
-                <th th:text="#{track}"></th>
-                <th th:text="#{time}"></th>
+                <th th:text="#{position}"></th>
+                <th th:text="#{driverName}"></th>
+                <th th:text="#{carName}"></th>
+                <th th:text="#{trackName}"></th>
+                <th th:text="#{eventPoints}"></th>
             </thead>
-            <tr th:each="event : ${events}">
-                <td th:text="${event.id}"></td>
-                <td th:text="${event.eventName}"></td>
-                <td th:text="${event.track}"></td>
-                <td th:text="${event.time}"></td>
+            <tr th:each="result : ${results}">
+                <td th:text="${result.id}"></td>
+                <td th:text="${result.driverName}"></td>
+                <td th:text="${result.carName}"></td>
+                <td th:text="${result.trackName}"></td>
+                <td th:text="${result.eventPoints}"></td>
             </tr>
         </table>
-        <div th:if="${#lists.isEmpty(events)}" th:text="|No events|"></div>
+        <div th:if="${#lists.isEmpty(results)}" th:text="|No results|"></div>
+    </section>
+    <section>
+        <h3 th:text="#{sessions}"></h3>
+        <table th:unless="${#lists.isEmpty(sessions)}" class="table table-bordered table-striped mb-0">
+            <tr>
+                <th th:text="#{sessionType}"></th>
+            </thead>
+            <tr th:each="sessionElement : ${sessions}">
+                <td><a th:href="@{/events/{id}/{sessionType}(id = ${event.id}, sessionType = ${sessionElement.type})}" th:text="${sessionElement.type}"></a></td>
+            </tr>
+        </table>
+        <div th:if="${#lists.isEmpty(sessions)}" th:text="|No sessions|"></div>
     </section>
     <footer th:replace="main :: footer_margin"></footer>
     <footer th:replace="main :: footer"></footer>
