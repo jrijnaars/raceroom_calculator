@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+    <header th:replace="main :: header(title=#{players})"></header>
+    <section>
+
+        <table th:unless="${#lists.isEmpty(players)}" class="table table-bordered table-striped mb-0">
+            <tr>
+                <th th:text="#{username}"></th>
+                <th th:text="#{points}"></th>
+            </thead>
+            <tr th:each="player : ${players}">
+                <td th:text="${player.username}"></td>
+                <td th:text="${player.points}"></td>
+            </tr>
+        </table>
+        <div th:if="${#lists.isEmpty(players)}" th:text="|No players|"></div>
+    </section>
+    <footer th:replace="main :: footer_margin"></footer>
+    <footer th:replace="main :: footer"></footer>
+</body>
+</html>
