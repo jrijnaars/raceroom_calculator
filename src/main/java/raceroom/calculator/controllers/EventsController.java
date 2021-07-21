@@ -51,7 +51,10 @@ public class EventsController {
     @GetMapping("/events/{id}/{sessionType}")
     public String eventSessionDetail(@PathVariable("id") Long id, @PathVariable("sessionType") String sessionType, Model model){
         List<PlayerEntity> players = playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(id, sessionType);
+        model.addAttribute("eventId", id);
+        model.addAttribute("sessionType", sessionType);
         model.addAttribute("players", players);
+        model.addAttribute("nbPlayers", players.size());
         return "eventSessionDetail";
     }
 }

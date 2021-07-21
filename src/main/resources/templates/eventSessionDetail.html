@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <header th:replace="main :: header(title=|Events ${eventId} - ${sessionType}|)"></header>
+    <section>
+        <table th:unless="${#lists.isEmpty(players)}" class="table table-bordered table-striped mb-0">
+            <tr>
+                <th th:text="#{position}"></th>
+                <th th:text="#{fullName}"></th>
+                <th th:text="#{carName}"></th>
+                <th th:text="#{points}"></th>
+            </thead>
+            <tr th:each="player : ${players}">
+                <td th:text="${((player.id-1) % nbPlayers) + 1}"></td>
+                <td th:text="${player.fullName}"></td>
+                <td th:text="${player.car}"></td>
+                <td th:text="${player.points}"></td>
+            </tr>
+        </table>
+        <div th:if="${#lists.isEmpty(players)}" th:text="|No players|"></div>
+    </section>
+    <footer th:replace="main :: footer_margin"></footer>
+    <footer th:replace="main :: footer"></footer>
+</body>
+</html>

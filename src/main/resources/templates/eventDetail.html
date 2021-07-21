@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 </head>
 <body>
-    <header th:replace="main :: header(title=#{events})"></header>
+    <header th:replace="main :: header(title=|#{eventDetail} - ${event.id}|)"></header>
     <section>
         <h3 th:text="#{results}"></h3>
         <!-- TODO print track name above -->
