@@ -34,7 +34,7 @@ public class RaceFactory extends CalculatorFactory {
         for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
             PlayerEntity playerEntity = playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
                     eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                            eventDTO.getServer(),
+                            getShortServername(eventDTO.getServer()),
                             eventDTO.getTrack(),
                             eventDTO.getTrackLayout()).getId(), sessionDTO.getType(), playerDTO.getFullName());
             setRacePoints(playerEntity);

@@ -10,7 +10,7 @@ import raceroom.calculator.rest.*;
 
 @Slf4j
 @Component
-public class PlayerFactory {
+public class PlayerFactory extends CalculatorFactory{
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -32,7 +32,7 @@ public class PlayerFactory {
     private PlayerEntity createPlayer(PlayerDTO playerDTO, EventDTO eventDTO, SessionDTO sessionDTO) {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setEventId(eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                eventDTO.getServer(),
+                getShortServername(eventDTO.getServer()),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout()).getId());
         playerEntity.setSessionType(sessionDTO.getType());

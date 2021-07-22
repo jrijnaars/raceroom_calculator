@@ -91,7 +91,7 @@ public class SeasonFactory extends CalculatorFactory {
     private List<PlayerEntity> getDriversForRace1(EventDTO eventDTO) {
         return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
                 eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        eventDTO.getServer(),
+                        getShortServername(eventDTO.getServer()),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId(),
                 "Race"
@@ -101,7 +101,7 @@ public class SeasonFactory extends CalculatorFactory {
     private List<PlayerEntity> getDriversForRace2(EventDTO eventDTO) {
         return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
                 eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        eventDTO.getServer(),
+                        getShortServername(eventDTO.getServer()),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId(),
                 "Race2"

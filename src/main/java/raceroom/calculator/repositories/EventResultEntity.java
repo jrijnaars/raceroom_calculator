@@ -16,6 +16,9 @@ public class EventResultEntity {
     private Long id;
 
     @Column
+    private Long eventId;
+
+    @Column
     private String eventName;
 
     @Column

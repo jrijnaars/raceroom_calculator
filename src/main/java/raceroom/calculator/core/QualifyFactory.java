@@ -12,7 +12,7 @@ import raceroom.calculator.rest.SessionDTO;
 
 @Component
 @Slf4j
-public class QualifyFactory {
+public class QualifyFactory extends CalculatorFactory {
 
     @Autowired
     EventRepository eventRepository;
@@ -26,7 +26,7 @@ public class QualifyFactory {
                 if (sessionDTO.getType().equals("Qualify")){
                     PlayerEntity playerEntity =  playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
                             eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                                    eventDTO.getServer(),
+                                    getShortServername(eventDTO.getServer()),
                                     eventDTO.getTrack(),
                                     eventDTO.getTrackLayout()).getId(), "Qualify", playerDTO.getFullName());
                     setQualifyPoints(sessionDTO, playerEntity);

@@ -32,7 +32,7 @@ public class EventFactory extends CalculatorFactory{
 
     public void calculateEventResults(EventDTO eventDTO) {
         EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                eventDTO.getServer(),
+                getShortServername(eventDTO.getServer()),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout());
         List<SessionDTO> racesInEvent = getRacesInEvent(eventDTO);
@@ -55,7 +55,7 @@ public class EventFactory extends CalculatorFactory{
 
     private EventEntity createEvent(EventDTO eventDTO) {
         EventEntity eventEntity = new EventEntity();
-        eventEntity.setServer(eventDTO.getServer());
+        eventEntity.setServer(getShortServername(eventDTO.getServer()));
         eventEntity.setStartTime(eventDTO.getStartTime());
         eventEntity.setTime(eventDTO.getTime());
         eventEntity.setFuelUsage(eventDTO.getFuelUsage());
@@ -66,17 +66,14 @@ public class EventFactory extends CalculatorFactory{
         eventEntity.setMandatoryPitstop(eventDTO.getMandatoryPitstop());
         eventEntity.setTrack(eventDTO.getTrack());
         eventEntity.setTrackLayout(eventDTO.getTrackLayout());
-        eventEntity.setEventName(createEventname(eventDTO));
+        eventEntity.setEventName(getShortServername(eventDTO.getServer()) + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout());
         return eventEntity;
-    }
-
-    private String createEventname(EventDTO eventDTO) {
-        return eventDTO.getServer() + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout();
     }
 
     private void createEventResultForPlayers(EventEntity eventEntity, List<PlayerEntity> players, EventDTO eventDTO) {
         for (PlayerEntity player: players) {
             EventResultEntity eventResults = getNewOrUsedEvent(eventEntity, player);
+            eventResults.setEventId(eventEntity.getId());
             eventResults.setEventName(eventEntity.getEventName());
             eventResults.setDriverName(player.getFullName());
             eventResults.setCarName(player.getCar());
@@ -105,6 +102,7 @@ public class EventFactory extends CalculatorFactory{
         }
     }
 
-    public void getEvent() {
+    public List<EventResultEntity> getEventresult(String eventname) {
+        return eventResultsRepository.getEventResultEntitiesByEventNameOrderByEventPointsDesc(eventname);
     }
 }

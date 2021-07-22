@@ -23,12 +23,16 @@ public class CalculatorFactory {
     protected int getDriverQualifyPoints(EventDTO eventDTO, PlayerEntity driver) {
         return playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
                 eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        eventDTO.getServer(),
+                        getShortServername(eventDTO.getServer()),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId(), "Qualify", driver.getFullName()).getPoints();
     }
 
     protected List<SessionDTO> getRacesInEvent(EventDTO eventDTO) {
         return eventDTO.getSessions().stream().filter(session -> session.getType().contains("Race")).collect(Collectors.toList());
+    }
+
+    protected String getShortServername(String servername) {
+        return servername.replace(": https://discord.gg/purXnnMgRA [twitch]", "");
     }
 }

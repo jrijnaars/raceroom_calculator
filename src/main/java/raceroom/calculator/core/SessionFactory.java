@@ -12,7 +12,7 @@ import raceroom.calculator.rest.SessionDTO;
 
 @Slf4j
 @Component
-public class SessionFactory {
+public class SessionFactory extends CalculatorFactory {
 
     @Autowired
     private SessionRepository sessionRepository;
@@ -27,7 +27,7 @@ public class SessionFactory {
     }
 
     private void createSession(SessionDTO sessionDTO, EventDTO eventDTO) {
-        EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(eventDTO.getServer(),
+        EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(getShortServername(eventDTO.getServer()),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout());
         SessionEntity session = new SessionEntity();
@@ -36,10 +36,5 @@ public class SessionFactory {
         session.setEventId(eventEntity.getId());
         sessionRepository.save(session);
         log.info("Session {} is saved in the database", session.getType());
-    }
-
-
-    public void sessionCalculator(EventDTO eventDTO) {
-
     }
 }
