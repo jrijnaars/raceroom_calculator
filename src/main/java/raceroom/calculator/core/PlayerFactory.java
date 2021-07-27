@@ -32,7 +32,7 @@ public class PlayerFactory extends CalculatorFactory{
     private PlayerEntity createPlayer(PlayerDTO playerDTO, EventDTO eventDTO, SessionDTO sessionDTO) {
         PlayerEntity playerEntity = new PlayerEntity();
         playerEntity.setEventId(eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                getShortServername(eventDTO.getServer()),
+                eventDTO.getServer(),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout()).getId());
         playerEntity.setSessionType(sessionDTO.getType());

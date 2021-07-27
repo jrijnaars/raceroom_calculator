@@ -27,7 +27,7 @@ public class SessionFactory extends CalculatorFactory {
     }
 
     private void createSession(SessionDTO sessionDTO, EventDTO eventDTO) {
-        EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(getShortServername(eventDTO.getServer()),
+        EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(eventDTO.getServer(),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout());
         SessionEntity session = new SessionEntity();

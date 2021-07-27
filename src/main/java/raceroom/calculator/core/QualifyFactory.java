@@ -26,7 +26,7 @@ public class QualifyFactory extends CalculatorFactory {
                 if (sessionDTO.getType().equals("Qualify")){
                     PlayerEntity playerEntity =  playerRepository.getPlayerEntityByEventIdAndSessionTypeAndFullName(
                             eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                                    getShortServername(eventDTO.getServer()),
+                                    eventDTO.getServer(),
                                     eventDTO.getTrack(),
                                     eventDTO.getTrackLayout()).getId(), "Qualify", playerDTO.getFullName());
                     setQualifyPoints(sessionDTO, playerEntity);

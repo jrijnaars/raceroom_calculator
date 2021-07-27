@@ -32,7 +32,7 @@ public class EventFactory extends CalculatorFactory{
 
     public void calculateEventResults(EventDTO eventDTO) {
         EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                getShortServername(eventDTO.getServer()),
+                eventDTO.getServer(),
                 eventDTO.getTrack(),
                 eventDTO.getTrackLayout());
         List<SessionDTO> racesInEvent = getRacesInEvent(eventDTO);
@@ -55,7 +55,7 @@ public class EventFactory extends CalculatorFactory{
 
     private EventEntity createEvent(EventDTO eventDTO) {
         EventEntity eventEntity = new EventEntity();
-        eventEntity.setServer(getShortServername(eventDTO.getServer()));
+        eventEntity.setServer(eventDTO.getServer());
         eventEntity.setStartTime(eventDTO.getStartTime());
         eventEntity.setTime(eventDTO.getTime());
         eventEntity.setFuelUsage(eventDTO.getFuelUsage());
@@ -66,7 +66,7 @@ public class EventFactory extends CalculatorFactory{
         eventEntity.setMandatoryPitstop(eventDTO.getMandatoryPitstop());
         eventEntity.setTrack(eventDTO.getTrack());
         eventEntity.setTrackLayout(eventDTO.getTrackLayout());
-        eventEntity.setEventName(getShortServername(eventDTO.getServer()) + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout());
+        eventEntity.setEventName(eventDTO.getServer() + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout());
         return eventEntity;
     }
 

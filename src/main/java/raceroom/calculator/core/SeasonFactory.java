@@ -88,7 +88,7 @@ public class SeasonFactory extends CalculatorFactory {
     private List<PlayerEntity> getDriversForRace(EventDTO eventDTO, SessionDTO session) {
         return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
                 eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        getShortServername(eventDTO.getServer()),
+                        eventDTO.getServer(),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId(),
                 session.getType());

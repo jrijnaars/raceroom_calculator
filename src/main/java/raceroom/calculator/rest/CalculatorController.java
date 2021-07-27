@@ -35,6 +35,7 @@ public class CalculatorController {
 
     @PostMapping(value="/calculateEvent")
     public String post(@RequestBody EventDTO eventDTO) {
+        eventDTO.setServer(getShortServername(eventDTO.getServer()));
         eventFactory.eventBuilder(eventDTO);
         sessionFactory.sessionBuilder(eventDTO);
         playerFactory.playerBuilder(eventDTO);
@@ -48,6 +49,10 @@ public class CalculatorController {
     @GetMapping(value = "/eventResults")
     public List<EventResultEntity> get(@RequestParam("eventname") String eventname) {
         return eventFactory.getEventresult(eventname);
+    }
+
+    private String getShortServername(String servername) {
+        return servername.replace(": https://discord.gg/purXnnMgRA [twitch]", "");
     }
 
 }
