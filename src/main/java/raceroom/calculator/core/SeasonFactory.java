@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import raceroom.calculator.repositories.*;
 import raceroom.calculator.rest.EventDTO;
+import raceroom.calculator.rest.SessionDTO;
 
 import java.util.List;
 
@@ -22,9 +23,13 @@ public class SeasonFactory extends CalculatorFactory {
     private SeasonRepository seasonRepository;
 
     public void seasonBuilder(EventDTO eventDTO) {
-        updateQuallifyPoints(eventDTO, getDriversForRace1(eventDTO));
-        updateRacePoints(eventDTO, getDriversForRace1(eventDTO));
-        updateRacePoints(eventDTO, getDriversForRace2(eventDTO));
+        for (SessionDTO session: eventDTO.getSessions()) {
+            if (session.getType().equals("Qualify")) {
+                updateQuallifyPoints(eventDTO, getDriversForRace(eventDTO, session));
+            } else {
+                updateRacePoints(eventDTO, getDriversForRace(eventDTO, session));
+            }
+        }
         log.info("season results are calculated");
     }
 
@@ -67,14 +72,6 @@ public class SeasonFactory extends CalculatorFactory {
         return driver.getCar().equals(season.getCarname()) || season.getCarname() == null;
     }
 
-    private int getFastestLapPoints(PlayerEntity driver) {
-     if (driver.isFastestLap()) {
-         return 6;
-     } else {
-         return 0;
-     }
-    }
-
     private SeasonEntity getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {
         SeasonEntity season = seasonRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), eventDTO.getServer());
         if (season == null) {
@@ -88,23 +85,12 @@ public class SeasonFactory extends CalculatorFactory {
                 0 : season.getSeasonPoints();
     }
 
-    private List<PlayerEntity> getDriversForRace1(EventDTO eventDTO) {
+    private List<PlayerEntity> getDriversForRace(EventDTO eventDTO, SessionDTO session) {
         return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
                 eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
                         getShortServername(eventDTO.getServer()),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId(),
-                "Race"
-        );
-    }
-
-    private List<PlayerEntity> getDriversForRace2(EventDTO eventDTO) {
-        return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
-                eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        getShortServername(eventDTO.getServer()),
-                        eventDTO.getTrack(),
-                        eventDTO.getTrackLayout()).getId(),
-                "Race2"
-        );
+                session.getType());
     }
 }
