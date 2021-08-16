@@ -51,4 +51,8 @@ public class EventEntity {
 
     @Column
     private String eventName;
+
+    @ManyToOne
+    @JoinColumn (nullable = false)
+    private SeasonEntity season;
 }

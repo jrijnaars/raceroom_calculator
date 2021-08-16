@@ -23,9 +23,9 @@ public class EventFactory extends CalculatorFactory{
     @Autowired
     private PlayerRepository playerRepository;
 
-    public void eventBuilder(EventDTO eventDTO) {
+    public void eventBuilder(EventDTO eventDTO, SeasonEntity seasonEntity) {
         eventdataDuplicateCheck(eventDTO);
-        EventEntity eventEntity = createEvent(eventDTO);
+        EventEntity eventEntity = createEvent(eventDTO, seasonEntity);
         eventRepository.save(eventEntity);
         log.info("Event {} is uploaded in the database", eventEntity.getEventName());
     }
@@ -53,7 +53,7 @@ public class EventFactory extends CalculatorFactory{
         }
     }
 
-    private EventEntity createEvent(EventDTO eventDTO) {
+    private EventEntity createEvent(EventDTO eventDTO, SeasonEntity seasonEntity) {
         EventEntity eventEntity = new EventEntity();
         eventEntity.setServer(eventDTO.getServer());
         eventEntity.setStartTime(eventDTO.getStartTime());
@@ -67,6 +67,7 @@ public class EventFactory extends CalculatorFactory{
         eventEntity.setTrack(eventDTO.getTrack());
         eventEntity.setTrackLayout(eventDTO.getTrackLayout());
         eventEntity.setEventName(eventDTO.getServer() + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout());
+        eventEntity.setSeason(seasonEntity);
         return eventEntity;
     }
 

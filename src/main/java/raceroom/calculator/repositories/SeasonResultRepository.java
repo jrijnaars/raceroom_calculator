@@ -6,9 +6,10 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@RepositoryRestResource(collectionResourceRel = "season", path = "seasons")
-public interface SeasonRepository extends PagingAndSortingRepository<SeasonEntity, Long> {
+@RepositoryRestResource(collectionResourceRel = "seasonresult", path = "seasonresults")
+public interface SeasonResultRepository extends PagingAndSortingRepository<SeasonResultEntity, Long> {
 
     @Transactional
-    SeasonEntity findSeasonEntityByName(String seasonname);
+    SeasonResultEntity getSeasonByDriverAndSeasonName(String driver, String seasonname);
+
 }

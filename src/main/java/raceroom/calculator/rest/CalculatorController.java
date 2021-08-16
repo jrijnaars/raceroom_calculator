@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import raceroom.calculator.core.*;
 import raceroom.calculator.repositories.EventResultEntity;
+import raceroom.calculator.repositories.SeasonEntity;
 
 import java.util.List;
 
@@ -36,13 +37,14 @@ public class CalculatorController {
     @PostMapping(value="/calculateEvent")
     public String post(@RequestBody EventDTO eventDTO) {
         eventDTO.setServer(getShortServername(eventDTO.getServer()));
-        eventFactory.eventBuilder(eventDTO);
+        SeasonEntity seasonEntity = seasonFactory.seasonBuilder(eventDTO);
+        eventFactory.eventBuilder(eventDTO, seasonEntity);
         sessionFactory.sessionBuilder(eventDTO);
         playerFactory.playerBuilder(eventDTO);
         qualifyFactory.qualifyBuilder(eventDTO);
         raceFactory.raceBuilder(eventDTO);
         eventFactory.calculateEventResults(eventDTO);
-        seasonFactory.seasonBuilder(eventDTO);
+        seasonFactory.seasonResultsBuilder(eventDTO, seasonEntity);
         return "upload succes!";
     }
 

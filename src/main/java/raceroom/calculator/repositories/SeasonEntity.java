@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,17 +14,15 @@ public class SeasonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long id;
+    private Long Id;
 
     @Column
-    private String seasonName;
+    private String name;
 
-    @Column
-    private String driver;
+    @OneToMany(mappedBy = "season")
+    private Set<EventEntity> events;
 
-    @Column
-    private int seasonPoints;
+    @OneToMany(mappedBy = "season")
+    private Set<SeasonResultEntity> results;
 
-    @Column
-    private String carname;
 }

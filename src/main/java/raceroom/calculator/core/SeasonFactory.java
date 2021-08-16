@@ -20,43 +20,58 @@ public class SeasonFactory extends CalculatorFactory {
     private EventRepository eventRepository;
 
     @Autowired
+    private SeasonResultRepository seasonResultRepository;
+
+    @Autowired
     private SeasonRepository seasonRepository;
 
-    public void seasonBuilder(EventDTO eventDTO) {
+    public void seasonResultsBuilder(EventDTO eventDTO, SeasonEntity seasonEntity) {
         for (SessionDTO session: eventDTO.getSessions()) {
             if (session.getType().equals("Qualify")) {
-                updateQuallifyPoints(eventDTO, getDriversForRace(eventDTO, session));
+                updateQuallifyPoints(eventDTO, getDriversForRace(eventDTO, session), seasonEntity);
             } else {
-                updateRacePoints(eventDTO, getDriversForRace(eventDTO, session));
+                updateRacePoints(eventDTO, getDriversForRace(eventDTO, session), seasonEntity);
             }
         }
-        log.info("season results are calculated");
+        log.info("seasonresults results are calculated");
     }
 
-    private void updateQuallifyPoints(EventDTO eventDTO, List<PlayerEntity> driversForRace1) {
+
+    public SeasonEntity seasonBuilder(EventDTO eventDTO) {
+        SeasonEntity seasonEntity = seasonRepository.findSeasonEntityByName(eventDTO.getServer());
+        if (seasonEntity == null) {
+            seasonEntity = new SeasonEntity();
+            seasonEntity.setName(eventDTO.getServer());
+            seasonRepository.save(seasonEntity);
+        }
+        log.info("season succesfull in database");
+        return seasonEntity;
+    }
+
+    private void updateQuallifyPoints(EventDTO eventDTO, List<PlayerEntity> driversForRace1, SeasonEntity seasonEntity) {
         for (PlayerEntity driver:driversForRace1) {
-            SeasonEntity season = getUsedOrNewSeason(driver, eventDTO);
-            season.setSeasonName(eventDTO.getServer());
+            SeasonResultEntity season = getUsedOrNewSeason(driver, eventDTO);
+            season.setSeason(seasonEntity);
             season.setDriver(driver.getFullName());
             int totalpoints = getDriverChampionshipPoints(season);
             totalpoints = totalpoints + getDriverQualifyPoints(eventDTO, driver);
             season.setSeasonPoints(totalpoints);
-            seasonRepository.save(season);
+            seasonResultRepository.save(season);
         }
     }
 
-    private void updateRacePoints(EventDTO eventDTO, List<PlayerEntity> driversForRace1) {
+    private void updateRacePoints(EventDTO eventDTO, List<PlayerEntity> driversForRace1, SeasonEntity seasonEntity) {
         for (PlayerEntity driver:driversForRace1) {
-            SeasonEntity season = getUsedOrNewSeason(driver, eventDTO);
-            season.setSeasonName(eventDTO.getServer());
+            SeasonResultEntity season = getUsedOrNewSeason(driver, eventDTO);
+            season.setSeason(seasonEntity);
             season.setDriver(driver.getFullName());
             season.setSeasonPoints(getTotalpoints(driver, season));
             season.setCarname(driver.getCar());
-            seasonRepository.save(season);
+            seasonResultRepository.save(season);
         }
     }
 
-    private int getTotalpoints(PlayerEntity driver, SeasonEntity season) {
+    private int getTotalpoints(PlayerEntity driver, SeasonResultEntity season) {
         int totalpoints = getDriverChampionshipPoints(season);
 
         if (!checkCarUsedBefore(driver, season)){
@@ -68,19 +83,19 @@ public class SeasonFactory extends CalculatorFactory {
         return totalpoints;
     }
 
-    private boolean checkCarUsedBefore(PlayerEntity driver, SeasonEntity season) {
+    private boolean checkCarUsedBefore(PlayerEntity driver, SeasonResultEntity season) {
         return driver.getCar().equals(season.getCarname()) || season.getCarname() == null;
     }
 
-    private SeasonEntity getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {
-        SeasonEntity season = seasonRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), eventDTO.getServer());
+    private SeasonResultEntity getUsedOrNewSeason(PlayerEntity driver, EventDTO eventDTO) {
+        SeasonResultEntity season = seasonResultRepository.getSeasonByDriverAndSeasonName(driver.getFullName(), eventDTO.getServer());
         if (season == null) {
-            season = new SeasonEntity();
+            season = new SeasonResultEntity();
         }
         return season;
     }
 
-    private int getDriverChampionshipPoints(SeasonEntity season) {
+    private int getDriverChampionshipPoints(SeasonResultEntity season) {
         return season == null ?
                 0 : season.getSeasonPoints();
     }
@@ -93,4 +108,5 @@ public class SeasonFactory extends CalculatorFactory {
                         eventDTO.getTrackLayout()).getId(),
                 session.getType());
     }
+
 }
