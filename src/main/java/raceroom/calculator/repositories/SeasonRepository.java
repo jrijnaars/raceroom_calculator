@@ -11,4 +11,5 @@ public interface SeasonRepository extends PagingAndSortingRepository<SeasonEntit
 
     @Transactional
     SeasonEntity findSeasonEntityByName(String seasonname);
+
 }

@@ -14,6 +14,6 @@ public class SessionDTO {
     private String type;
 
     @JsonProperty("Players")
-    private List<PlayerDTO> playerDTOS;
+    private List<PlayerDTO> player;
 
 }

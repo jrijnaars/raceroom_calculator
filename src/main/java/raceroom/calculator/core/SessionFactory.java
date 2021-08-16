@@ -24,7 +24,7 @@ public class SessionFactory extends CalculatorFactory {
     public void sessionBuilder(EventDTO eventDTO, EventEntity eventEntity) {
         for (SessionDTO sessionDTO : eventDTO.getSessions()) {
             SessionEntity sessionEntity = createSession(sessionDTO, eventEntity);
-            for (PlayerDTO player: sessionDTO.getPlayerDTOS()) {
+            for (PlayerDTO player: sessionDTO.getPlayer()) {
                 PlayerResultEntity playerResult = playerResultFactory.playerResultsBuilder(player, sessionEntity, eventEntity);
                 sessionEntity.getPlayerResults().add(playerResult);
             }

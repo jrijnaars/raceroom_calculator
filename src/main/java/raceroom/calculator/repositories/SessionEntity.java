@@ -24,7 +24,7 @@ public class SessionEntity {
     @JoinColumn(nullable = false)
     private EventEntity event;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<PlayerResultEntity> playerResults = new HashSet<>();
 
 }
