@@ -21,8 +21,9 @@ public class EventResultEntity {
     @Column
     private String eventName;
 
-    @Column
-    private String driverName;
+    @ManyToOne
+    @JoinColumn( nullable = false)
+    private PlayerEntity player;
 
     @Column
     private String carName;

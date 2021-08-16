@@ -19,8 +19,9 @@ public class SeasonResultEntity {
     @JoinColumn (nullable = false)
     private SeasonEntity season;
 
-    @Column
-    private String driver;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private PlayerEntity player;
 
     @Column
     private int seasonPoints;

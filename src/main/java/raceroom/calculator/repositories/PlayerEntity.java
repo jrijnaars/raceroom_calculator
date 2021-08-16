@@ -1,71 +1,29 @@
 package raceroom.calculator.repositories;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlayerEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
-
-    @Column
-    private long eventId;
-
-    @Column
-    private String sessionType;
-
-    @Column
-    private int userId;
 
     @Column
     private String fullName;
 
     @Column
-    private String username;
+    private String userName;
 
-    @Column
-    private int userWeightPenalty;
-
-    @Column
-    private int carId;
-
-    @Column
-    private String car;
-
-    @Column
-    private int carWeightPenalty;
-
-    @Column
-    private int position;
-
-    @Column
-    private int positionInClass;
-
-    @Column
-    private int startPosition;
-
-    @Column
-    private int startPositionInClass;
-
-    @Column
-    private int bestLapTime;
-
-    @Column
-    private String finishStatus;
-
-    @Column
-    private int points;
-
-    @Column
-    private boolean fastestLap;
-
-    @Column
-    private int incidentPoints;
 }

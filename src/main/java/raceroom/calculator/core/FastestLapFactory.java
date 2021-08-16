@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import raceroom.calculator.repositories.EventRepository;
-import raceroom.calculator.repositories.PlayerEntity;
-import raceroom.calculator.repositories.PlayerRepository;
+import raceroom.calculator.repositories.PlayerResultEntity;
+import raceroom.calculator.repositories.PlayerResultRepository;
 import raceroom.calculator.rest.EventDTO;
 import raceroom.calculator.rest.SessionDTO;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class FastestLapFactory {
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerResultRepository playerResultRepository;
 
     @Autowired
     private EventRepository eventRepository;
@@ -28,11 +28,11 @@ public class FastestLapFactory {
                         eventDTO.getServer(),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId();
-                List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
+                List<PlayerResultEntity> bestLapTimeAsc = playerResultRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
                         eventId, sessionDTO.getType());
-                PlayerEntity player = bestLapTimeAsc.get(0);
+                PlayerResultEntity player = bestLapTimeAsc.get(0);
                 player.setFastestLap(true);
-                playerRepository.save(player);
+                playerResultRepository.save(player);
             }
         }
         log.info("Fastest lap resuls have been set");
@@ -45,11 +45,11 @@ public class FastestLapFactory {
                         eventDTO.getServer(),
                         eventDTO.getTrack(),
                         eventDTO.getTrackLayout()).getId();
-                List<PlayerEntity> bestLapTimeAsc = playerRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
+                List<PlayerResultEntity> bestLapTimeAsc = playerResultRepository.getPlayersByEventIdAndSessionTypeOrderByBestLapTimeAsc(
                         eventId, sessionDTO.getType());
-                PlayerEntity player = bestLapTimeAsc.get(0);
+                PlayerResultEntity player = bestLapTimeAsc.get(0);
                 player.setFastestLap(true);
-                playerRepository.save(player);
+                playerResultRepository.save(player);
             }
         }
         log.info("Fastest lap resuls have been set");

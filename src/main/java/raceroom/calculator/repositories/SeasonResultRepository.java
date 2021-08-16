@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface SeasonResultRepository extends PagingAndSortingRepository<SeasonResultEntity, Long> {
 
     @Transactional
-    SeasonResultEntity getSeasonByDriverAndSeasonName(String driver, String seasonname);
+    SeasonResultEntity getSeasonByPlayerAndSeasonName(PlayerEntity player, String seasonname);
 
 }

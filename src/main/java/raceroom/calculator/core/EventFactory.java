@@ -21,7 +21,7 @@ public class EventFactory extends CalculatorFactory{
     private EventResultsRepository eventResultsRepository;
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private PlayerResultRepository playerResultRepository;
 
     public void eventBuilder(EventDTO eventDTO, SeasonEntity seasonEntity) {
         eventdataDuplicateCheck(eventDTO);
@@ -37,8 +37,8 @@ public class EventFactory extends CalculatorFactory{
                 eventDTO.getTrackLayout());
         List<SessionDTO> racesInEvent = getRacesInEvent(eventDTO);
         for (SessionDTO race: racesInEvent) {
-            List<PlayerEntity> players = playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(eventEntity.getId(), race.getType());
-            createEventResultForPlayers(eventEntity, players, eventDTO);
+            List<PlayerResultEntity> playersResults = playerResultRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(eventEntity.getId(), race.getType());
+            createEventResultForPlayers(eventEntity, playersResults, eventDTO);
         }
     }
 
@@ -71,20 +71,20 @@ public class EventFactory extends CalculatorFactory{
         return eventEntity;
     }
 
-    private void createEventResultForPlayers(EventEntity eventEntity, List<PlayerEntity> players, EventDTO eventDTO) {
-        for (PlayerEntity player: players) {
-            EventResultEntity eventResults = getNewOrUsedEvent(eventEntity, player);
+    private void createEventResultForPlayers(EventEntity eventEntity, List<PlayerResultEntity> playerResults, EventDTO eventDTO) {
+        for (PlayerResultEntity playerResult: playerResults) {
+            EventResultEntity eventResults = getNewOrUsedEvent(eventEntity, playerResult);
             eventResults.setEventId(eventEntity.getId());
             eventResults.setEventName(eventEntity.getEventName());
-            eventResults.setDriverName(player.getFullName());
-            eventResults.setCarName(player.getCar());
+            eventResults.setPlayer(playerResult.getPlayer());
+            eventResults.setCarName(playerResult.getCar());
             eventResults.setTrackName(eventEntity.getTrack());
-            eventResults.setEventPoints(setEventPoints(eventResults, player, eventDTO));
+            eventResults.setEventPoints(setEventPoints(eventResults, playerResult, eventDTO));
             eventResultsRepository.save(eventResults);
         }
     }
 
-    private int setEventPoints(EventResultEntity eventResults, PlayerEntity player, EventDTO eventDTO) {
+    private int setEventPoints(EventResultEntity eventResults, PlayerResultEntity player, EventDTO eventDTO) {
         int totalPoints = eventResults.getEventPoints() + player.getPoints();
         if (player.getSessionType().equals("Race")) {
             totalPoints = totalPoints + getDriverQualifyPoints(eventDTO, player);
@@ -92,10 +92,10 @@ public class EventFactory extends CalculatorFactory{
         return totalPoints;
     }
 
-    private EventResultEntity getNewOrUsedEvent(EventEntity eventEntity, PlayerEntity player) {
-        EventResultEntity eventResults = eventResultsRepository.getEventResultEntityByEventNameAndDriverName(
+    private EventResultEntity getNewOrUsedEvent(EventEntity eventEntity, PlayerResultEntity playerResult) {
+        EventResultEntity eventResults = eventResultsRepository.getEventResultEntityByEventNameAndPlayer(
                 eventEntity.getEventName(),
-                player.getFullName());
+                playerResult.getPlayer());
         if (eventResults == null) {
             return new EventResultEntity();
         } else {

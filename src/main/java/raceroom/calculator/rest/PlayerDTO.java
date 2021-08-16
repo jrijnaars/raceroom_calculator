@@ -11,7 +11,7 @@ import java.util.List;
 public class PlayerDTO {
 
     @JsonProperty("UserId")
-    private int userId;
+    private Long userId;
 
     @JsonProperty("FullName")
     private String fullName;

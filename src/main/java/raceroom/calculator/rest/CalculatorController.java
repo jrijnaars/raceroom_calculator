@@ -20,7 +20,7 @@ public class CalculatorController {
     private SessionFactory sessionFactory;
 
     @Autowired
-    private PlayerFactory playerFactory;
+    private PlayerResultFactory playerResultFactory;
 
     @Autowired
     private SeasonFactory seasonFactory;
@@ -29,7 +29,7 @@ public class CalculatorController {
     private QualifyFactory qualifyFactory;
 
     @Autowired
-    private RaceFactory raceFactory;
+    private RaceService raceService;
 
     @Autowired
     FastestLapFactory fastestLapFactory;
@@ -40,9 +40,7 @@ public class CalculatorController {
         SeasonEntity seasonEntity = seasonFactory.seasonBuilder(eventDTO);
         eventFactory.eventBuilder(eventDTO, seasonEntity);
         sessionFactory.sessionBuilder(eventDTO);
-        playerFactory.playerBuilder(eventDTO);
-        qualifyFactory.qualifyBuilder(eventDTO);
-        raceFactory.raceBuilder(eventDTO);
+        playerResultFactory.playerResultsBuilder(eventDTO);
         eventFactory.calculateEventResults(eventDTO);
         seasonFactory.seasonResultsBuilder(eventDTO, seasonEntity);
         return "upload succes!";

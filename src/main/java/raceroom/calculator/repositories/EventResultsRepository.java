@@ -12,7 +12,7 @@ import java.util.List;
 public interface EventResultsRepository extends PagingAndSortingRepository<EventResultEntity, Long> {
 
     @Transactional
-    EventResultEntity getEventResultEntityByEventNameAndDriverName(String eventName, String driverName);
+    EventResultEntity getEventResultEntityByEventNameAndPlayer(String eventName, PlayerEntity player);
 
     List<EventResultEntity> getEventResultEntitiesByEventNameOrderByEventPointsDesc(String eventname);
 
