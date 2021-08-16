@@ -10,7 +10,7 @@ import raceroom.calculator.rest.*;
 
 @Slf4j
 @Component
-public class PlayerFactory {
+public class PlayerFactory extends CalculatorFactory{
 
     @Autowired
     private PlayerRepository playerRepository;

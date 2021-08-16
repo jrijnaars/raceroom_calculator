@@ -85,26 +85,6 @@ public class SeasonFactory extends CalculatorFactory {
                 0 : season.getSeasonPoints();
     }
 
-    private List<PlayerEntity> getDriversForRace1(EventDTO eventDTO) {
-        return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
-                eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        eventDTO.getServer(),
-                        eventDTO.getTrack(),
-                        eventDTO.getTrackLayout()).getId(),
-                "Race"
-        );
-    }
-
-    private List<PlayerEntity> getDriversForRace2(EventDTO eventDTO) {
-        return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
-                eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-                        eventDTO.getServer(),
-                        eventDTO.getTrack(),
-                        eventDTO.getTrackLayout()).getId(),
-                "Race2"
-        );
-    }
-
     private List<PlayerEntity> getDriversForRace(EventDTO eventDTO, SessionDTO session) {
         return playerRepository.getPlayersByEventIdAndSessionTypeOrderByPositionAsc(
                 eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
