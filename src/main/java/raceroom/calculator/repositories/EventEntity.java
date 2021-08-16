@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -55,4 +57,13 @@ public class EventEntity {
     @ManyToOne
     @JoinColumn (nullable = false)
     private SeasonEntity season;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private Set<SessionEntity> sessions = new HashSet<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private Set<PlayerResultEntity> playerResults = new HashSet<>();
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private Set<EventResultEntity> eventResults = new HashSet<>();
 }

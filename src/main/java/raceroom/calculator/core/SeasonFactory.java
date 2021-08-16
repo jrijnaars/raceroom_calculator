@@ -54,7 +54,7 @@ public class SeasonFactory extends CalculatorFactory {
             seasonResult.setSeason(seasonEntity);
             seasonResult.setPlayer(playerResult.getPlayer());
             int totalpoints = getDriverChampionshipPoints(seasonResult);
-            totalpoints = totalpoints + getDriverQualifyPoints(eventDTO, playerResult);
+            totalpoints = totalpoints + getDriverQualifyPoints(playerResult);
             seasonResult.setSeasonPoints(totalpoints);
             seasonResultRepository.save(seasonResult);
         }

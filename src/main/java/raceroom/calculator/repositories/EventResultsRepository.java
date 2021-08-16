@@ -12,8 +12,8 @@ import java.util.List;
 public interface EventResultsRepository extends PagingAndSortingRepository<EventResultEntity, Long> {
 
     @Transactional
-    EventResultEntity getEventResultEntityByEventNameAndPlayer(String eventName, PlayerEntity player);
+    EventResultEntity getEventResultEntityByEvent_EventNameAndPlayer(String eventName, PlayerEntity player);
 
-    List<EventResultEntity> getEventResultEntitiesByEventNameOrderByEventPointsDesc(String eventname);
+    List<EventResultEntity> getEventResultEntitiesByEvent_EventNameOrderByEventPointsDesc(String eventname);
 
 }

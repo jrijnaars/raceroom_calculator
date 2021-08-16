@@ -3,11 +3,9 @@ package raceroom.calculator.core;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.repositories.EventEntity;
-import raceroom.calculator.repositories.EventRepository;
-import raceroom.calculator.repositories.SessionEntity;
-import raceroom.calculator.repositories.SessionRepository;
+import raceroom.calculator.repositories.*;
 import raceroom.calculator.rest.EventDTO;
+import raceroom.calculator.rest.PlayerDTO;
 import raceroom.calculator.rest.SessionDTO;
 
 @Slf4j
@@ -20,21 +18,25 @@ public class SessionFactory extends CalculatorFactory {
     @Autowired
     private EventRepository eventRepository;
 
-    public void sessionBuilder(EventDTO eventDTO) {
+    @Autowired
+    private PlayerResultFactory playerResultFactory;
+
+    public void sessionBuilder(EventDTO eventDTO, EventEntity eventEntity) {
         for (SessionDTO sessionDTO : eventDTO.getSessions()) {
-            createSession(sessionDTO, eventDTO);
+            SessionEntity sessionEntity = createSession(sessionDTO, eventEntity);
+            for (PlayerDTO player: sessionDTO.getPlayerDTOS()) {
+                PlayerResultEntity playerResult = playerResultFactory.playerResultsBuilder(player, sessionEntity, eventEntity);
+                sessionEntity.getPlayerResults().add(playerResult);
+            }
         }
     }
 
-    private void createSession(SessionDTO sessionDTO, EventDTO eventDTO) {
-        EventEntity eventEntity = eventRepository.getEventEntityByServerAndTrackAndTrackLayout(eventDTO.getServer(),
-                eventDTO.getTrack(),
-                eventDTO.getTrackLayout());
+    private SessionEntity createSession(SessionDTO sessionDTO, EventEntity eventEntity) {
         SessionEntity session = new SessionEntity();
         session.setType(sessionDTO.getType());
-        session.setEventname(eventEntity.getEventName());
-        session.setEventId(eventEntity.getId());
-        sessionRepository.save(session);
-        log.info("Session {} is saved in the database", session.getType());
+        session.setEvent(eventEntity);
+        eventEntity.getSessions().add(session);
+        log.info("Session {} is added to the event", session.getType());
+        return session;
     }
 }

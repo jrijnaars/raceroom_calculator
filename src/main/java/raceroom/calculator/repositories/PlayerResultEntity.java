@@ -15,11 +15,13 @@ public class PlayerResultEntity {
     @Column
     private Long id;
 
-    @Column
-    private long eventId;
+    @ManyToOne
+    @JoinColumn (nullable = false)
+    private EventEntity event;
 
-    @Column
-    private String sessionType;
+    @ManyToOne
+    @JoinColumn (nullable = false)
+    private SessionEntity session;
 
     @ManyToOne
     @JoinColumn (nullable = false)

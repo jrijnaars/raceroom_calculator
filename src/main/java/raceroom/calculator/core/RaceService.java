@@ -1,11 +1,8 @@
 package raceroom.calculator.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.repositories.EventRepository;
 import raceroom.calculator.repositories.PlayerResultEntity;
-import raceroom.calculator.repositories.PlayerResultRepository;
 import raceroom.calculator.rest.IncidentDTO;
 import raceroom.calculator.rest.LapDTO;
 import raceroom.calculator.rest.PlayerDTO;
@@ -14,40 +11,14 @@ import raceroom.calculator.rest.PlayerDTO;
 @Slf4j
 public class RaceService extends CalculatorFactory {
 
-    @Autowired
-    private PlayerResultRepository playerResultRepository;
-
-    @Autowired
-    private EventRepository eventRepository;
-
-//    public void raceBuilder(EventDTO eventDTO) {
-//        List<SessionDTO> racesInEvent = getRacesInEvent(eventDTO);
-//        for (SessionDTO sessionDTO : racesInEvent) {
-//            setPointsForSession(eventDTO, sessionDTO);
-//        }
-//        log.info("Raceresults have been set");
-//    }
-
-//    private void setPointsForSession(EventDTO eventDTO, SessionDTO sessionDTO) {
-//        for (PlayerDTO playerDTO : sessionDTO.getPlayerDTOS()) {
-//            PlayerResultEntity playerResultEntity = playerResultRepository.getPlayerEntityByEventIdAndSessionTypeAndPlayer(
-//                    eventRepository.getEventEntityByServerAndTrackAndTrackLayout(
-//                            eventDTO.getServer(),
-//                            eventDTO.getTrack(),
-//                            eventDTO.getTrackLayout()).getId(), sessionDTO.getType(), playerDTO.getFullName());
-//            setRacePoints(playerResultEntity);
-//            playerResultRepository.save(playerResultEntity);
-//        }
-//    }
-
     public void setQualifyPoints(PlayerResultEntity playerResultEntity) {
-        if (playerResultEntity.getSessionType().equals("Qualify") && playerResultEntity.getPosition() == 1) {
+        if (playerResultEntity.getSession().getType().equals("Qualify") && playerResultEntity.getPosition() == 1) {
             playerResultEntity.setPoints(6);
         }
     }
 
     public void setRacePoints(PlayerResultEntity playerResultEntity) {
-        if (playerResultEntity.getSessionType().contains("Race")){
+        if (playerResultEntity.getSession().getType().contains("Race")){
             setPointsByRacePosition(playerResultEntity);
             excludeDidNotFinish(playerResultEntity);
             excludeDisqualified(playerResultEntity);

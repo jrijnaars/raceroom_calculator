@@ -15,11 +15,9 @@ public class EventResultEntity {
     @Column
     private Long id;
 
-    @Column
-    private Long eventId;
-
-    @Column
-    private String eventName;
+    @ManyToOne
+    @JoinColumn( nullable = false)
+    private EventEntity event;
 
     @ManyToOne
     @JoinColumn( nullable = false)
