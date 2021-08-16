@@ -31,4 +31,6 @@ public class CalculatorFactory {
     protected List<SessionDTO> getRacesInEvent(EventDTO eventDTO) {
         return eventDTO.getSessions().stream().filter(session -> session.getType().contains("Race")).collect(Collectors.toList());
     }
+
+
 }

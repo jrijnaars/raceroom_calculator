@@ -2,10 +2,11 @@ package raceroom.calculator.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import raceroom.calculator.core.*;
+import raceroom.calculator.repositories.EventResultEntity;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -34,6 +35,7 @@ public class CalculatorController {
 
     @PostMapping(value="/calculateEvent")
     public String post(@RequestBody EventDTO eventDTO) {
+        eventDTO.setServer(getShortServername(eventDTO.getServer()));
         eventFactory.eventBuilder(eventDTO);
         sessionFactory.sessionBuilder(eventDTO);
         playerFactory.playerBuilder(eventDTO);
@@ -43,4 +45,14 @@ public class CalculatorController {
         seasonFactory.seasonBuilder(eventDTO);
         return "upload succes!";
     }
+
+    @GetMapping(value = "/eventResults")
+    public List<EventResultEntity> get(@RequestParam("eventname") String eventname) {
+        return eventFactory.getEventresult(eventname);
+    }
+
+    private String getShortServername(String servername) {
+        return servername.replace(": https://discord.gg/purXnnMgRA [twitch]", "");
+    }
+
 }

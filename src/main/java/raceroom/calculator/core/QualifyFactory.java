@@ -12,7 +12,7 @@ import raceroom.calculator.rest.SessionDTO;
 
 @Component
 @Slf4j
-public class QualifyFactory {
+public class QualifyFactory extends CalculatorFactory {
 
     @Autowired
     EventRepository eventRepository;

@@ -66,17 +66,14 @@ public class EventFactory extends CalculatorFactory{
         eventEntity.setMandatoryPitstop(eventDTO.getMandatoryPitstop());
         eventEntity.setTrack(eventDTO.getTrack());
         eventEntity.setTrackLayout(eventDTO.getTrackLayout());
-        eventEntity.setEventName(createEventname(eventDTO));
+        eventEntity.setEventName(eventDTO.getServer() + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout());
         return eventEntity;
-    }
-
-    private String createEventname(EventDTO eventDTO) {
-        return eventDTO.getServer() + "_" + eventDTO.getTrack() + "_" + eventDTO.getTrackLayout();
     }
 
     private void createEventResultForPlayers(EventEntity eventEntity, List<PlayerEntity> players, EventDTO eventDTO) {
         for (PlayerEntity player: players) {
             EventResultEntity eventResults = getNewOrUsedEvent(eventEntity, player);
+            eventResults.setEventId(eventEntity.getId());
             eventResults.setEventName(eventEntity.getEventName());
             eventResults.setDriverName(player.getFullName());
             eventResults.setCarName(player.getCar());
@@ -103,5 +100,9 @@ public class EventFactory extends CalculatorFactory{
         } else {
             return eventResults;
         }
+    }
+
+    public List<EventResultEntity> getEventresult(String eventname) {
+        return eventResultsRepository.getEventResultEntitiesByEventNameOrderByEventPointsDesc(eventname);
     }
 }
