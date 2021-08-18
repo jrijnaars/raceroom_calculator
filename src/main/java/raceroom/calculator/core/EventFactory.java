@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import raceroom.calculator.repositories.*;
 import raceroom.calculator.rest.EventDTO;
 
-import java.util.List;
-
 @Slf4j
 @Component
 public class EventFactory extends CalculatorFactory {
@@ -20,13 +18,7 @@ public class EventFactory extends CalculatorFactory {
     private EventResultsRepository eventResultsRepository;
 
     @Autowired
-    private PlayerResultRepository playerResultRepository;
-
-    @Autowired
     private SessionFactory sessionFactory;
-
-    @Autowired
-    private PlayerResultFactory playerResultFactory;
 
     public EventEntity eventBuilder(EventDTO eventDTO, SeasonEntity seasonEntity) {
         eventdataDuplicateCheck(eventDTO);
@@ -106,7 +98,4 @@ public class EventFactory extends CalculatorFactory {
         }
     }
 
-    public List<EventResultEntity> getEventresult(String eventname) {
-        return eventResultsRepository.getEventResultEntitiesByEvent_EventNameOrderByEventPointsDesc(eventname);
-    }
 }

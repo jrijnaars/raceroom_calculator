@@ -12,8 +12,11 @@ public class SeasonResultDTO {
     private Long id;
 
     @JsonProperty("Player")
-    private PlayerDTO player;
+    private ReturnPlayerDTO player;
 
     @JsonProperty("Points")
     private int points;
+
+    @JsonProperty("CarName")
+    private String carname;
 }

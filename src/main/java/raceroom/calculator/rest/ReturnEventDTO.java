@@ -11,8 +11,8 @@ public class ReturnEventDTO {
     @JsonProperty("Id")
     private Long id;
 
-    @JsonProperty("Server")
-    private String server;
+    @JsonProperty("EventName")
+    private String eventName;
 
     @JsonProperty("StartTime")
     private int startTime;

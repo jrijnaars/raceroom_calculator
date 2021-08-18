@@ -3,7 +3,9 @@ package raceroom.calculator.core;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import raceroom.calculator.repositories.*;
+import raceroom.calculator.repositories.EventEntity;
+import raceroom.calculator.repositories.PlayerResultEntity;
+import raceroom.calculator.repositories.SessionEntity;
 import raceroom.calculator.rest.EventDTO;
 import raceroom.calculator.rest.PlayerDTO;
 import raceroom.calculator.rest.SessionDTO;
@@ -11,12 +13,6 @@ import raceroom.calculator.rest.SessionDTO;
 @Slf4j
 @Component
 public class SessionFactory extends CalculatorFactory {
-
-    @Autowired
-    private SessionRepository sessionRepository;
-
-    @Autowired
-    private EventRepository eventRepository;
 
     @Autowired
     private PlayerResultFactory playerResultFactory;

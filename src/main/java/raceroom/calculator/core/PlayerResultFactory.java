@@ -11,9 +11,6 @@ import raceroom.calculator.rest.PlayerDTO;
 public class PlayerResultFactory extends CalculatorFactory {
 
     @Autowired
-    private PlayerResultRepository playerResultRepository;
-
-    @Autowired
     private PlayerRepository playerRepository;
 
     @Autowired

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import raceroom.calculator.core.EventFactory;
-import raceroom.calculator.core.FastestLapFactory;
 import raceroom.calculator.core.SeasonFactory;
 import raceroom.calculator.repositories.EventEntity;
 import raceroom.calculator.repositories.EventRepository;
@@ -22,9 +21,6 @@ public class CalculatorController {
 
     @Autowired
     private SeasonFactory seasonFactory;
-
-    @Autowired
-    FastestLapFactory fastestLapFactory;
 
     @Autowired
     private SeasonRepository seasonRepository;
