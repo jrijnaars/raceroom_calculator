@@ -4,8 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -66,4 +69,8 @@ public class EventEntity {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<EventResultEntity> eventResults = new HashSet<>();
+
+    public List<EventResultEntity> getsortedResults() {
+        return this.getEventResults().stream().sorted(Comparator.comparing(EventResultEntity::getEventPoints).reversed()).collect(Collectors.toList());
+    }
 }

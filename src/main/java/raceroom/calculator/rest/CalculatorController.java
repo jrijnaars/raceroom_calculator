@@ -7,10 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import raceroom.calculator.core.EventFactory;
 import raceroom.calculator.core.SeasonFactory;
-import raceroom.calculator.repositories.EventEntity;
-import raceroom.calculator.repositories.EventRepository;
-import raceroom.calculator.repositories.SeasonEntity;
-import raceroom.calculator.repositories.SeasonRepository;
+import raceroom.calculator.repositories.*;
 
 @Slf4j
 @RestController
@@ -46,14 +43,23 @@ public class CalculatorController {
     }
 
     @GetMapping(value = "/season/{id}")
-    public SeasonSummaryDTO getEvents(Model Model, @PathVariable("id") SeasonEntity seasonEntity) {
+    public SeasonSummaryDTO getSeason(Model Model, @PathVariable("id") SeasonEntity seasonEntity) {
         seasonRepository.findAll();
         ModelMapper modelmapper = new ModelMapper();
         modelmapper.typeMap(SeasonEntity.class, SeasonSummaryDTO.class).addMappings(mapper -> {
             mapper.map(SeasonEntity::getsortedResults, SeasonSummaryDTO::setResults);
         });
         return modelmapper.map(seasonEntity, SeasonSummaryDTO.class);
+    }
 
+    @GetMapping(value = "/event/{id}")
+    public EventSummaryDTO getEvent(Model Model, @PathVariable("id") EventResultEntity eventResultEntity) {
+        eventRepository.findAll();
+        ModelMapper modelmapper = new ModelMapper();
+        modelmapper.typeMap(EventEntity.class, SeasonSummaryDTO.class).addMappings(mapper -> {
+            mapper.map(EventEntity::getsortedResults, SeasonSummaryDTO::setResults);
+        });
+        return modelmapper.map(eventResultEntity, EventSummaryDTO.class);
     }
 
     private String getShortServername(String servername) {
