@@ -38,4 +38,5 @@ build/
 /database.mv.db
 /database.trace.db
 /src/main/resources/races/**/*.json
+#/src/main/resources/cars/**/*.json
 /src/main/resources/races/oneoff/

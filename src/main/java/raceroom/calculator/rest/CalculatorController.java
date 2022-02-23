@@ -33,6 +33,9 @@ public class CalculatorController {
     @Autowired
     FastestLapFactory fastestLapFactory;
 
+    @Autowired
+    CarDataProcessor carDataProcessor;
+
     @PostMapping(value="/calculateEvent")
     public String post(@RequestBody EventDTO eventDTO) {
         eventDTO.setServer(getShortServername(eventDTO.getServer()));
@@ -51,8 +54,19 @@ public class CalculatorController {
         return eventFactory.getEventresult(eventname);
     }
 
+    @PostMapping(value= "/ProcessCarData")
+    public String processCarData(@RequestBody CarDataDTO carDataDTO) {
+        carDataProcessor.insertCardataIntoDB(carDataDTO);
+        return "Car is updated in the DB";
+    }
+
+    @PutMapping(value= "/processAllCars")
+    public String processCarData() {
+        carDataProcessor.getCarDataFromRecources();
+        return "all cars are updated in the database";
+    }
+
     private String getShortServername(String servername) {
         return servername.replace(": https://discord.gg/purXnnMgRA [twitch]", "");
     }
-
 }
